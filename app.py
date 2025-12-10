@@ -18,7 +18,6 @@ import yaml
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 
@@ -99,11 +98,27 @@ def cosine_similarity(a: List[float], b: List[float]) -> float:
 
 # Precompute embeddings for all QA entries at startup.
 qa_corpus = [f"Q: {item['question']}\nA: {item['answer']}" for item in qa_pairs]
-qa_embeddings = compute_embeddings(qa_corpus)
+
+# Initialize embeddings with error handling
+qa_embeddings = []
+try:
+    print("Computing embeddings for knowledge base...")
+    qa_embeddings = compute_embeddings(qa_corpus)
+    print(f"Successfully computed {len(qa_embeddings)} embeddings")
+except Exception as e:
+    print(f"Warning: Failed to compute embeddings at startup: {e}")
+    print("Embeddings will be computed on first request")
 
 
 def retrieve_relevant_qa(query: str, k: int = 6) -> List[Dict[str, str]]:
     """Return the top-k most semantically similar Q&A entries for the user query."""
+    global qa_embeddings
+    
+    # Compute embeddings on first request if not done at startup
+    if not qa_embeddings:
+        print("Computing embeddings on first request...")
+        qa_embeddings = compute_embeddings(qa_corpus)
+    
     resp = client.embeddings.create(
         model=embed_model,
         input=[query],
@@ -187,8 +202,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files (for serving HTML, CSS, JS, images)
-app.mount("/static", StaticFiles(directory="."), name="static")
+# Static file serving removed - using simple FileResponse instead
 
 
 class ChatRequest(BaseModel):
@@ -202,7 +216,11 @@ class ChatResponse(BaseModel):
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok"}
+    return {
+        "status": "ok", 
+        "qa_pairs_loaded": len(qa_pairs),
+        "embeddings_ready": len(qa_embeddings) > 0
+    }
 
 @app.get("/")
 def serve_portfolio():
