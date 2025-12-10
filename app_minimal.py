@@ -73,6 +73,7 @@ class ChatResponse(BaseModel):
 def health_check():
     return {
         "status": "ok", 
+        "version": "full_ai_v2",
         "qa_pairs_loaded": len(qa_pairs),
         "openai_ready": client is not None,
         "model": llm_model if client else "not configured"
