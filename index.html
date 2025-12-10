@@ -500,6 +500,9 @@
                     <a href="chat.html" class="btn btn-primary">
                         🤖 Chat with My AI Assistant
                     </a>
+                    <a href="/resume" class="btn btn-secondary" target="_blank">
+                        📄 Download Resume
+                    </a>
                     <a href="https://www.linkedin.com/in/james-bell-tam" class="btn btn-secondary" target="_blank">
                         💼 View LinkedIn
                     </a>
@@ -785,6 +788,9 @@
                     <a href="chat.html" class="btn btn-primary">
                         🤖 Chat with AI Assistant
                     </a>
+                    <a href="/resume" class="btn btn-secondary" target="_blank">
+                        📄 Download Resume
+                    </a>
                     <a href="https://calendly.com/jamesbellworkrelated" class="btn btn-secondary" target="_blank">
                         📅 Schedule Call
                     </a>
@@ -842,6 +848,35 @@
             } else {
                 nav.style.background = 'rgba(10, 10, 10, 0.95)';
             }
+        });
+
+        // Track button clicks for analytics
+        function trackEvent(eventName, details = {}) {
+            // Simple client-side tracking
+            console.log('Event:', eventName, details);
+            
+            // You can extend this to send to analytics services
+            // Example: Google Analytics, Mixpanel, etc.
+        }
+
+        // Track CTA button clicks
+        document.addEventListener('DOMContentLoaded', function() {
+            // Track chat button clicks
+            document.querySelectorAll('a[href="chat.html"]').forEach(button => {
+                button.addEventListener('click', () => trackEvent('chat_button_click'));
+            });
+
+            // Track resume download clicks
+            document.querySelectorAll('a[href="/resume"]').forEach(button => {
+                button.addEventListener('click', () => trackEvent('resume_download_click'));
+            });
+
+            // Track external link clicks
+            document.querySelectorAll('a[target="_blank"]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    trackEvent('external_link_click', { url: e.target.href });
+                });
+            });
         });
     </script>
 </body>
