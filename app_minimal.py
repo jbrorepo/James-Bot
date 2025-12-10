@@ -350,10 +350,71 @@ def chat_endpoint(payload: ChatRequest, request: Request):
         if not client:
             return ChatResponse(reply="AI assistant is currently unavailable. Please contact James directly at jamesbellworkrelated@gmail.com")
         
-        # Simple keyword matching for relevant Q&A
-        message = payload.message.lower()
+        # Handle conversational patterns and Q&A matching
+        message = payload.message.lower().strip()
         
-        # Find best matching Q&A
+        # Handle greetings and basic conversation
+        greeting_patterns = ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings', 'howdy']
+        thanks_patterns = ['thank you', 'thanks', 'appreciate it', 'thx', 'ty']
+        goodbye_patterns = ['bye', 'goodbye', 'see you', 'farewell', 'take care', 'later', 'ttyl']
+        help_patterns = ['help', 'what can you do', 'what do you know', 'how does this work']
+        who_patterns = ['who are you', 'what are you', 'tell me about yourself', 'introduce yourself']
+        
+        # Check for conversational patterns first
+        if any(pattern in message for pattern in greeting_patterns):
+            greeting_response = """Hello! I'm James Bell's AI assistant, designed to answer questions about his professional background and experience. I only provide information that's been verified and documented in my knowledge base - no fabrications or assumptions.
+
+I can tell you about James's current role as a Concierge Security Engineer 3 & Team Lead at Arctic Wolf, his technical skills, leadership experience, customer success approach, and AI career goals.
+
+What would you like to know about James's background?"""
+            
+            # Log the conversation turn
+            log_conversation(session_id, payload.message, greeting_response, request)
+            return ChatResponse(reply=greeting_response)
+        
+        elif any(pattern in message for pattern in thanks_patterns):
+            thanks_response = "You're welcome! Feel free to ask me anything else about James's experience, or you can contact him directly at jamesbellworkrelated@gmail.com or connect on LinkedIn at https://www.linkedin.com/in/james-bell-tam"
+            
+            # Log the conversation turn
+            log_conversation(session_id, payload.message, thanks_response, request)
+            return ChatResponse(reply=thanks_response)
+        
+        elif any(pattern in message for pattern in goodbye_patterns):
+            goodbye_response = "Thanks for chatting! If you'd like to continue the conversation with James directly, you can reach him at jamesbellworkrelated@gmail.com or schedule a call at https://calendly.com/jamesbellworkrelated. Have a great day!"
+            
+            # Log the conversation turn
+            log_conversation(session_id, payload.message, goodbye_response, request)
+            return ChatResponse(reply=goodbye_response)
+        
+        elif any(pattern in message for pattern in help_patterns):
+            help_response = """I'm here to answer questions about James Bell's professional background! I can tell you about:
+
+• His current role as Concierge Security Engineer 3 & Team Lead at Arctic Wolf
+• His technical skills in security, cloud platforms, and automation
+• His leadership experience and customer success approach
+• His AI projects and career goals
+• His work philosophy and personal interests
+
+I only share verified information from my knowledge base - no made-up details. What specific aspect of James's background interests you most?"""
+            
+            # Log the conversation turn
+            log_conversation(session_id, payload.message, help_response, request)
+            return ChatResponse(reply=help_response)
+        
+        elif any(pattern in message for pattern in who_patterns):
+            intro_response = """I'm James Bell's AI assistant! I was actually built by James himself as a demonstration of his AI development skills. 
+
+I'm designed to answer questions about James's professional background using only verified information from a curated knowledge base. I can tell you about his role at Arctic Wolf, his technical expertise, leadership experience, and career goals.
+
+This AI assistant showcases James's hands-on experience with GPT-5.1, FastAPI, retrieval-augmented generation, and responsible AI practices.
+
+What would you like to know about James?"""
+            
+            # Log the conversation turn
+            log_conversation(session_id, payload.message, intro_response, request)
+            return ChatResponse(reply=intro_response)
+        
+        # Find best matching Q&A for substantive questions
         best_match = None
         best_score = 0
         
