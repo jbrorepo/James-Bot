@@ -466,59 +466,7 @@
             }
         }
 
-        /* Chat Modal */
-        .chat-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
 
-        .chat-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-modal-content {
-            width: 90%;
-            max-width: 800px;
-            height: 90%;
-            max-height: 600px;
-            background: #1a1a1a;
-            border-radius: 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chat-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #2a2a2a;
-            border: none;
-            color: #e0e0e0;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 16px;
-        }
     </style>
 </head>
 <body>
@@ -549,7 +497,7 @@
                     intelligent systems that enhance human capabilities.
                 </p>
                 <div class="cta-buttons">
-                    <a href="#" class="btn btn-primary" onclick="openChat()">
+                    <a href="chat.html" class="btn btn-primary">
                         🤖 Chat with My AI Assistant
                     </a>
                     <a href="https://www.linkedin.com/in/james-bell-tam" class="btn btn-secondary" target="_blank">
@@ -626,7 +574,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" class="btn btn-primary try-chat-btn" onclick="openChat()">
+                <a href="chat.html" class="btn btn-primary try-chat-btn">
                     Try the AI Assistant
                 </a>
             </div>
@@ -834,7 +782,7 @@
                     or reach out directly through your preferred channel.
                 </p>
                 <div class="cta-buttons" style="justify-content: center;">
-                    <a href="#" class="btn btn-primary" onclick="openChat()">
+                    <a href="chat.html" class="btn btn-primary">
                         🤖 Chat with AI Assistant
                     </a>
                     <a href="https://calendly.com/jamesbellworkrelated" class="btn btn-secondary" target="_blank">
@@ -865,31 +813,10 @@
         </div>
     </footer>
 
-    <!-- Chat Modal -->
-    <div class="chat-modal" id="chatModal">
-        <div class="chat-modal-content">
-            <button class="chat-close" onclick="closeChat()">×</button>
-            <iframe src="chat.html" class="chat-iframe" id="chatIframe"></iframe>
-        </div>
-    </div>
+
 
     <script>
-        function openChat() {
-            document.getElementById('chatModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
 
-        function closeChat() {
-            document.getElementById('chatModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('chatModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeChat();
-            }
-        });
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
