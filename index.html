@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with James Bell</title>
+    <title>James Bell - Concierge Security Engineer & AI Innovator</title>
+    <meta name="description" content="James Bell is a Concierge Security Engineer 3 & Team Lead at Arctic Wolf, specializing in cloud security, customer success, and AI-driven solutions.">
     
-    <!-- Libraries for export functionality -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="James Bell - Security Engineer & AI Innovator">
+    <meta property="og:description" content="Leading security teams at Arctic Wolf while pioneering AI solutions. Chat with my AI assistant to learn more.">
+    <meta property="og:url" content="https://jamesbell.dev">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -18,1084 +23,899 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #0f0f0f;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
             color: #e0e0e0;
-            height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.1) 0%, rgba(10, 10, 10, 1) 70%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-image {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
         }
 
-        .chat-container {
-            width: 100%;
-            max-width: 800px;
-            height: 90vh;
-            background: #1a1a1a;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .chat-header {
+        .profile-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 24px;
-            text-align: center;
-        }
-
-        .chat-header h1 {
-            font-size: 24px;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
             color: white;
-            margin-bottom: 4px;
+            font-weight: 700;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            border: 4px solid #2a2a2a;
         }
 
-        .chat-header p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .hero-content .description {
+            font-size: 1.1rem;
+            color: #d0d0d0;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .chat-messages::-webkit-scrollbar-track {
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #e0e0e0;
+            border: 2px solid #333;
+        }
+
+        .btn-secondary:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* AI Chat Preview */
+        .chat-preview {
             background: #1a1a1a;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2a2a2a;
         }
 
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-
-        .message {
+        .chat-header-preview {
             display: flex;
-            gap: 12px;
-            animation: fadeIn 0.3s ease-in;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #2a2a2a;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
         }
 
-        .message.user {
+        .chat-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .chat-info p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .chat-messages-preview {
+            space-y: 1rem;
+        }
+
+        .message-preview {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-preview.user {
             flex-direction: row-reverse;
         }
 
-        .message-avatar {
-            width: 36px;
-            height: 36px;
+        .message-avatar-preview {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.8rem;
             font-weight: 600;
-            font-size: 14px;
             flex-shrink: 0;
         }
 
-        .message.user .message-avatar {
+        .message-preview.user .message-avatar-preview {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .message.assistant .message-avatar {
+        .message-preview.assistant .message-avatar-preview {
             background: #2a2a2a;
             color: #667eea;
         }
 
-        .message-content {
-            max-width: 70%;
-            padding: 12px 16px;
+        .message-content-preview {
+            background: #2a2a2a;
+            padding: 0.75rem 1rem;
             border-radius: 12px;
+            max-width: 80%;
+            font-size: 0.9rem;
             line-height: 1.5;
-            font-size: 15px;
         }
 
-        .message.user .message-content {
+        .message-preview.user .message-content-preview {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-bottom-right-radius: 4px;
         }
 
-        .message.assistant .message-content {
-            background: #2a2a2a;
-            color: #e0e0e0;
-            border-bottom-left-radius: 4px;
-        }
-
-        .typing-indicator {
-            display: none;
-            gap: 4px;
-            padding: 12px 16px;
-        }
-
-        .typing-indicator.active {
-            display: flex;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #667eea;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.7;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
-        .chat-input-container {
-            padding: 20px 24px;
-            background: #1a1a1a;
-            border-top: 1px solid #2a2a2a;
-        }
-
-        .chat-input-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .chat-input {
-            flex: 1;
-            background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 24px;
-            padding: 12px 20px;
-            color: #e0e0e0;
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .chat-input:focus {
-            border-color: #667eea;
-        }
-
-        .chat-input::placeholder {
-            color: #666;
-        }
-
-        .send-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
+        .try-chat-btn {
+            width: 100%;
+            margin-top: 1rem;
             justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-            flex-shrink: 0;
         }
 
-        .send-button:hover:not(:disabled) {
-            transform: scale(1.05);
+        /* Sections */
+        .section {
+            padding: 5rem 0;
         }
 
-        .send-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        .empty-state {
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
             text-align: center;
-            color: #666;
-            padding: 40px 20px;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .empty-state h2 {
-            font-size: 20px;
-            margin-bottom: 12px;
-            color: #999;
+        /* Experience Cards */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
         }
 
-        .empty-state p {
-            font-size: 14px;
+        .experience-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .experience-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+        }
+
+        .experience-card .company {
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .experience-card .description {
+            color: #d0d0d0;
             line-height: 1.6;
         }
 
-        .suggested-questions {
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #2a2a2a;
+        }
+
+        .skill-category h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .skill-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 0 4px;
+            gap: 0.5rem;
         }
 
-        .suggested-question {
+        .skill-tag {
             background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 16px;
-            padding: 8px 14px;
             color: #e0e0e0;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 13px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #333;
+        }
+
+        /* Achievement Cards */
+        .achievement-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .suggested-question:hover {
-            background: #333;
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .export-controls {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding: 0 4px;
-        }
-
-        .export-btn {
-            background: #2a2a2a;
             border: 1px solid #333;
-            border-radius: 6px;
-            padding: 6px 12px;
-            color: #e0e0e0;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
         }
 
-        .export-btn:hover {
-            background: #333;
-            border-color: #667eea;
+        .achievement-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
         }
 
-        .export-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .chat-input-section {
-            padding: 20px 24px;
-            background: #1a1a1a;
-            border-top: 1px solid #2a2a2a;
-        }
-
-        .message-timestamp {
-            font-size: 11px;
-            color: #666;
-            margin-top: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .message:hover .message-timestamp {
-            opacity: 1;
-        }
-
-        .message-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .message:hover .message-actions {
-            opacity: 1;
-        }
-
-        .action-btn {
-            background: none;
-            border: 1px solid #333;
-            border-radius: 4px;
-            padding: 4px 8px;
-            color: #666;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            background: #333;
-            color: #e0e0e0;
-        }
-
-        .contact-actions {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 0 4px;
-        }
-
-        .contact-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            color: white;
-            cursor: pointer;
-            font-size: 13px;
+        .achievement-label {
+            color: #b0b0b0;
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        .contact-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        /* Project Tech Tags */
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
         }
 
-        .follow-up-suggestions {
-            margin-top: 12px;
-            padding: 12px;
-            background: #1e1e1e;
+        /* Education Items */
+        .education-item {
+            padding: 1.5rem;
+            background: #1a1a1a;
             border-radius: 8px;
             border-left: 3px solid #667eea;
         }
 
-        .follow-up-title {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .follow-up-questions {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .follow-up-question {
-            background: #2a2a2a;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: #e0e0e0;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-            text-align: left;
-        }
-
-        .follow-up-question:hover {
-            background: #333;
-            border-color: #667eea;
-        }
-
-        .loading-indicator {
-            display: none;
+        /* Footer */
+        .footer {
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            padding: 3rem 0;
             text-align: center;
-            padding: 20px;
-            color: #666;
         }
 
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #333;
-            border-radius: 50%;
-            border-top-color: #667eea;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .chat-container {
-                height: 100vh;
-                border-radius: 0;
-                margin: 0;
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
 
-            .suggested-questions {
-                flex-direction: column;
-                gap: 6px;
+            .hero-content h1 {
+                font-size: 2.5rem;
             }
 
-            .suggested-question {
-                white-space: normal;
-                text-align: left;
+            .nav-links {
+                display: none;
             }
 
-            .contact-actions {
-                flex-direction: column;
+            .cta-buttons {
+                justify-content: center;
             }
+        }
 
-            .export-controls {
-                flex-wrap: wrap;
-            }
+        /* Chat Modal */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
 
-            .message-content {
-                max-width: 85%;
-            }
+        .chat-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-modal-content {
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
+            max-height: 600px;
+            background: #1a1a1a;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #2a2a2a;
+            border: none;
+            color: #e0e0e0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>James Bell</h1>
-            <p>Concierge Security Engineer 3 & Team Lead | Arctic Wolf</p>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">James Bell</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </div>
+    </nav>
 
-        <div class="chat-messages" id="chatMessages">
-            <div class="empty-state">
-                <h2>👋 Hi, I'm James</h2>
-                <p>Ask me anything about my experience, skills, or background.<br>I'm here to help you learn more about what I can bring to your team.</p>
-
-            </div>
-        </div>
-
-        <div class="chat-input-section">
-            <div class="contact-actions" id="contactActions" style="display: none;">
-                <a href="https://calendly.com/jamesbellworkrelated" target="_blank" class="contact-btn">
-                    📅 Schedule Call
-                </a>
-                <a href="https://www.linkedin.com/in/james-bell-tam" target="_blank" class="contact-btn">
-                    💼 Connect on LinkedIn
-                </a>
-                <a href="mailto:jamesbellworkrelated@gmail.com?subject=Following up on our AI chat&body=Hi James,%0D%0A%0D%0AI just finished chatting with your AI assistant and would like to continue our conversation.%0D%0A%0D%0ABest regards," class="contact-btn">
-                    ✉️ Send Email
-                </a>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>James Bell</h1>
+                <p class="subtitle">Concierge Security Engineer 3 & Team Lead</p>
+                <p class="description">
+                    Leading security teams at Arctic Wolf while pioneering AI-driven solutions. 
+                    I specialize in cloud security hardening, customer success, and building 
+                    intelligent systems that enhance human capabilities.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" onclick="openChat()">
+                        🤖 Chat with My AI Assistant
+                    </a>
+                    <a href="https://www.linkedin.com/in/james-bell-tam" class="btn btn-secondary" target="_blank">
+                        💼 View LinkedIn
+                    </a>
+                    <a href="https://calendly.com/jamesbellworkrelated" class="btn btn-secondary" target="_blank">
+                        📅 Schedule Call
+                    </a>
+                </div>
             </div>
             
-            <div class="export-controls" id="exportControls" style="display: none;">
-                <button class="export-btn" onclick="exportToPDF()">📄 Export PDF</button>
-                <button class="export-btn" onclick="exportToWord()">📝 Export Word</button>
-                <button class="export-btn" onclick="clearChat()">🗑️ Clear Chat</button>
+            <div class="hero-image">
+                <div class="profile-image" id="profileImage">
+                    <img src="james-headshot.jpg" alt="James Bell - Concierge Security Engineer 3 & Team Lead at Arctic Wolf">
+                </div>
             </div>
-            
-            <div class="suggested-questions" id="suggestedQuestions">
-                <button class="suggested-question" onclick="sendSuggestion('What is your current role at Arctic Wolf?')">
-                    Current Role
-                </button>
-                <button class="suggested-question" onclick="sendSuggestion('How do you handle difficult customers?')">
-                    Customer Management
-                </button>
-                <button class="suggested-question" onclick="sendSuggestion('What technologies do you work with?')">
-                    Technical Skills
-                </button>
-                <button class="suggested-question" onclick="sendSuggestion('Tell me about your leadership experience')">
-                    Leadership
-                </button>
-                <button class="suggested-question" onclick="sendSuggestion('What are your AI career goals?')">
-                    AI Goals
-                </button>
-            </div>
+        </div>
+    </section>
 
-            <div class="chat-input-wrapper">
-                <input 
-                    type="text" 
-                    class="chat-input" 
-                    id="messageInput" 
-                    placeholder="Ask me anything..."
-                    onkeypress="handleKeyPress(event)"
-                >
-                <button class="send-button" id="sendButton" onclick="sendMessage()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                </button>
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: start;">
+                <div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #d0d0d0; margin-bottom: 2rem;">
+                        I'm a security engineer who believes technology should enhance human capabilities, not replace them. 
+                        At Arctic Wolf, I lead a team of three engineers supporting over 120 customers, focusing on proactive 
+                        security posture improvements and rapid incident recovery.
+                    </p>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #d0d0d0; margin-bottom: 2rem;">
+                        My journey from individual contributor to team lead in just over a year demonstrates my commitment 
+                        to excellence and continuous learning. I'm passionate about AI-driven solutions and have built 
+                        several projects, including this very AI assistant you can chat with.
+                    </p>
+                    <div class="achievements-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        <div class="achievement-card">
+                            <div class="achievement-number">120+</div>
+                            <div class="achievement-label">Customers Supported</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-number">95-100%</div>
+                            <div class="achievement-label">Customer Satisfaction</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-number">13 Months</div>
+                            <div class="achievement-label">Promotion Timeline</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-number">3</div>
+                            <div class="achievement-label">Team Members Led</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-preview">
+                <div class="chat-header-preview">
+                    <div class="chat-avatar">JB</div>
+                    <div class="chat-info">
+                        <h3>AI Assistant</h3>
+                        <p>Ask me anything about James's experience</p>
+                    </div>
+                </div>
+                <div class="chat-messages-preview">
+                    <div class="message-preview user">
+                        <div class="message-avatar-preview">You</div>
+                        <div class="message-content-preview">
+                            What's your current role at Arctic Wolf?
+                        </div>
+                    </div>
+                    <div class="message-preview assistant">
+                        <div class="message-avatar-preview">JB</div>
+                        <div class="message-content-preview">
+                            I'm a Concierge Security Engineer 3 and Team Lead at Arctic Wolf. I lead a team of three engineers supporting 120+ customers with security posture reviews, log troubleshooting, and post-incident recovery...
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-primary try-chat-btn" onclick="openChat()">
+                    Try the AI Assistant
+                </a>
             </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section" style="background: #0f0f0f;">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>🤖 AI Resume Assistant</h3>
+                    <p class="company">Personal Project • 2025</p>
+                    <p class="description">
+                        Built this interactive AI assistant using GPT-5.1, FastAPI, and retrieval-augmented generation. 
+                        Features semantic search over curated Q&A data, strict factual constraints, and professional 
+                        export capabilities. Demonstrates modern AI development practices.
+                    </p>
+                    <div class="project-tech">
+                        <span class="skill-tag">GPT-5.1</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">RAG</span>
+                        <span class="skill-tag">JavaScript</span>
+                    </div>
+                </div>
+                <div class="experience-card">
+                    <h3>🎮 Card Recognition AI</h3>
+                    <p class="company">Riftbound Trading Card Game • Ongoing</p>
+                    <p class="description">
+                        Developing OCR and image recognition system for trading card identification and auto-parsing. 
+                        Combines computer vision with practical gaming applications, showcasing AI's potential in 
+                        entertainment and hobby industries.
+                    </p>
+                    <div class="project-tech">
+                        <span class="skill-tag">OCR</span>
+                        <span class="skill-tag">Computer Vision</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Image Processing</span>
+                    </div>
+                </div>
+                <div class="experience-card">
+                    <h3>🔧 Customer Automation Tools</h3>
+                    <p class="company">Arctic Wolf • 2024-2025</p>
+                    <p class="description">
+                        Created Python and PowerShell scripts for bulk account management, log parsing automation, 
+                        and customer workflow optimization. Reduced manual tasks by 60% and improved team efficiency 
+                        across 120+ customer accounts.
+                    </p>
+                    <div class="project-tech">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">PowerShell</span>
+                        <span class="skill-tag">Automation</span>
+                        <span class="skill-tag">APIs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section id="education" class="section">
+        <div class="container">
+            <h2 class="section-title">Education & Growth</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 1.5rem; font-size: 1.3rem;">Continuous Learning</h3>
+                    <div class="education-item" style="margin-bottom: 2rem;">
+                        <h4 style="color: #e0e0e0; margin-bottom: 0.5rem;">Creative Writing & Technical Studies</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 0.5rem;">Ongoing Education</p>
+                        <p style="color: #d0d0d0; font-size: 0.95rem;">
+                            Pursuing formal education in creative writing and technical studies, demonstrating 
+                            commitment to both analytical and creative thinking.
+                        </p>
+                    </div>
+                    <div class="education-item">
+                        <h4 style="color: #e0e0e0; margin-bottom: 0.5rem;">Professional Development</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 0.5rem;">Self-Directed Learning</p>
+                        <p style="color: #d0d0d0; font-size: 0.95rem;">
+                            Advanced career in technology through hands-on experience, mentorship, and continuous 
+                            skill development rather than traditional linear academic path.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 1.5rem; font-size: 1.3rem;">Key Influences</h3>
+                    <div class="education-item">
+                        <h4 style="color: #e0e0e0; margin-bottom: 0.5rem;">Mrs. Lana Hall</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 0.5rem;">High School Debate Teacher</p>
+                        <p style="color: #d0d0d0; font-size: 0.95rem;">
+                            Taught practical life skills including resume building, interviewing, and professional 
+                            presentation. Her guidance shaped my approach to communication and career development.
+                        </p>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h4 style="color: #e0e0e0; margin-bottom: 1rem;">Core Values</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <span class="skill-tag">Kindness</span>
+                            <span class="skill-tag">Ownership</span>
+                            <span class="skill-tag">Curiosity</span>
+                            <span class="skill-tag">Continuous Learning</span>
+                            <span class="skill-tag">Empathy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>Concierge Security Engineer 3 & Team Lead</h3>
+                    <p class="company">Arctic Wolf • May 2024 - Present</p>
+                    <p class="description">
+                        Leading a team of 3 engineers supporting 120+ customers. Performing deep log-source analysis, 
+                        cloud security hardening across AWS, Azure, and GCP, and proactive security posture reviews. 
+                        Promoted to Team Lead in June 2025 after exceptional performance.
+                    </p>
+                </div>
+                <div class="experience-card">
+                    <h3>Customer Technical Engineer</h3>
+                    <p class="company">Alert Logic by Fortra • Previous Role</p>
+                    <p class="description">
+                        Owned technical relationships for enterprise accounts, handled escalated security issues, 
+                        and guided customers through best practices. Consistently maintained 95-100% CSAT scores 
+                        across managed accounts.
+                    </p>
+                </div>
+                <div class="experience-card">
+                    <h3>AI Innovation Projects</h3>
+                    <p class="company">Personal Development • Ongoing</p>
+                    <p class="description">
+                        Building AI-powered solutions including this resume assistant using GPT-5.1, FastAPI, 
+                        and retrieval-augmented generation. Also developing OCR and image recognition systems 
+                        for trading card game applications.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>🔒 Security & Cloud</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">AWS Security</span>
+                        <span class="skill-tag">Azure Security</span>
+                        <span class="skill-tag">GCP Security</span>
+                        <span class="skill-tag">IAM Reviews</span>
+                        <span class="skill-tag">Log Analysis</span>
+                        <span class="skill-tag">Incident Response</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>💻 Programming & Automation</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">PowerShell</span>
+                        <span class="skill-tag">Bash</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">Automation</span>
+                        <span class="skill-tag">Scripting</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>🤖 AI & Modern Tech</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">GPT-5.1</span>
+                        <span class="skill-tag">OpenAI APIs</span>
+                        <span class="skill-tag">RAG Systems</span>
+                        <span class="skill-tag">OCR</span>
+                        <span class="skill-tag">Image Recognition</span>
+                        <span class="skill-tag">Embeddings</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>👥 Leadership & Customer Success</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Team Leadership</span>
+                        <span class="skill-tag">Customer Success</span>
+                        <span class="skill-tag">Technical Account Management</span>
+                        <span class="skill-tag">Mentoring</span>
+                        <span class="skill-tag">Stakeholder Management</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #d0d0d0;">
+                    Ready to discuss how I can contribute to your team? Start with my AI assistant 
+                    or reach out directly through your preferred channel.
+                </p>
+                <div class="cta-buttons" style="justify-content: center;">
+                    <a href="#" class="btn btn-primary" onclick="openChat()">
+                        🤖 Chat with AI Assistant
+                    </a>
+                    <a href="https://calendly.com/jamesbellworkrelated" class="btn btn-secondary" target="_blank">
+                        📅 Schedule Call
+                    </a>
+                    <a href="https://www.linkedin.com/in/james-bell-tam" class="btn btn-secondary" target="_blank">
+                        💼 LinkedIn
+                    </a>
+                    <a href="mailto:jamesbellworkrelated@gmail.com" class="btn btn-secondary">
+                        ✉️ Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://www.linkedin.com/in/james-bell-tam" target="_blank">LinkedIn</a>
+                <a href="mailto:jamesbellworkrelated@gmail.com">Email</a>
+                <a href="https://calendly.com/jamesbellworkrelated" target="_blank">Schedule Call</a>
+            </div>
+            <p style="color: #666;">
+                © 2025 James Bell. Built with AI assistance using GPT-5.1 and modern web technologies.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Chat Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-modal-content">
+            <button class="chat-close" onclick="closeChat()">×</button>
+            <iframe src="chat.html" class="chat-iframe" id="chatIframe"></iframe>
         </div>
     </div>
 
     <script>
-        const API_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8000/chat'
-            : '/chat';
-        const chatMessages = document.getElementById('chatMessages');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
-        const exportControls = document.getElementById('exportControls');
-        
-        // Chat history storage
-        let chatHistory = [];
-        
-        // Load chat history from localStorage on page load
-        window.addEventListener('load', function() {
-            const savedHistory = localStorage.getItem('jamesBellChatHistory');
-            if (savedHistory) {
-                chatHistory = JSON.parse(savedHistory);
-                restoreChatHistory();
+        function openChat() {
+            document.getElementById('chatModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeChat() {
+            document.getElementById('chatModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('chatModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeChat();
             }
         });
 
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        function sendSuggestion(text) {
-            messageInput.value = text;
-            sendMessage();
-        }
-
-        function addMessage(content, isUser, saveToHistory = true) {
-            // Remove empty state if it exists
-            const emptyState = chatMessages.querySelector('.empty-state');
-            if (emptyState) {
-                emptyState.remove();
-                exportControls.style.display = 'flex';
-                document.getElementById('contactActions').style.display = 'flex';
-            }
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
-            
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = isUser ? 'You' : 'JB';
-            
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.textContent = content;
-            
-            // Add timestamp
-            const timestamp = new Date();
-            const timestampDiv = document.createElement('div');
-            timestampDiv.className = 'message-timestamp';
-            timestampDiv.textContent = timestamp.toLocaleTimeString();
-            
-            // Add message actions
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'message-actions';
-            
-            const copyBtn = document.createElement('button');
-            copyBtn.className = 'action-btn';
-            copyBtn.textContent = '📋 Copy';
-            copyBtn.onclick = () => copyToClipboard(content);
-            
-            actionsDiv.appendChild(copyBtn);
-            
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(messageContent);
-            messageContent.appendChild(timestampDiv);
-            messageContent.appendChild(actionsDiv);
-            
-            chatMessages.appendChild(messageDiv);
-            
-            // Add follow-up suggestions for bot messages
-            if (!isUser && saveToHistory) {
-                addFollowUpSuggestions(content);
-            }
-            
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Save to history and localStorage
-            if (saveToHistory) {
-                const timestampISO = new Date().toISOString();
-                chatHistory.push({
-                    content: content,
-                    isUser: isUser,
-                    timestamp: timestampISO
-                });
-                localStorage.setItem('jamesBellChatHistory', JSON.stringify(chatHistory));
-            }
-        }
-        
-        function restoreChatHistory() {
-            chatHistory.forEach(msg => {
-                addMessage(msg.content, msg.isUser, false);
-            });
-            if (chatHistory.length > 0) {
-                exportControls.style.display = 'flex';
-            }
-        }
-
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message assistant';
-            typingDiv.id = 'typingIndicator';
-            
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = 'JB';
-            
-            const typingContent = document.createElement('div');
-            typingContent.className = 'message-content typing-indicator active';
-            typingContent.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-            
-            typingDiv.appendChild(avatar);
-            typingDiv.appendChild(typingContent);
-            
-            chatMessages.appendChild(typingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            const typingIndicator = document.getElementById('typingIndicator');
-            if (typingIndicator) {
-                typingIndicator.remove();
-            }
-        }
-
-        async function sendMessage() {
-            const message = messageInput.value.trim();
-            if (!message) return;
-
-            // Disable input
-            messageInput.disabled = true;
-            sendButton.disabled = true;
-
-            // Add user message
-            addMessage(message, true);
-            messageInput.value = '';
-
-            // Show typing indicator
-            showTypingIndicator();
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        history: []
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                // Hide typing indicator
-                hideTypingIndicator();
-                
-                // Add assistant response
-                addMessage(data.reply, false);
-
-            } catch (error) {
-                hideTypingIndicator();
-                addMessage('Sorry, I encountered an error. Please make sure the backend server is running on http://localhost:8000', false);
-                console.error('Error:', error);
-            } finally {
-                // Re-enable input
-                messageInput.disabled = false;
-                sendButton.disabled = false;
-                messageInput.focus();
-            }
-        }
-        
-        function clearChat() {
-            if (confirm('Are you sure you want to clear the chat history?')) {
-                chatHistory = [];
-                localStorage.removeItem('jamesBellChatHistory');
-                chatMessages.innerHTML = `
-                    <div class="empty-state">
-                        <h2>👋 Hi, I'm James</h2>
-                        <p>Ask me anything about my experience, skills, or background.<br>I'm here to help you learn more about what I can bring to your team.</p>
-                    </div>
-                `;
-                exportControls.style.display = 'none';
-            }
-        }
-        
-        function exportToPDF() {
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // Header
-                doc.setFontSize(16);
-                doc.setFont(undefined, 'bold');
-                doc.text('Chat with James Bell AI Assistant', 20, 20);
-                
-                doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                const now = new Date();
-                doc.text(`Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 20, 30);
-                doc.text('LinkedIn: https://www.linkedin.com/in/james-bell-tam', 20, 35);
-                doc.text('Email: jamesbellworkrelated@gmail.com', 20, 40);
-                
-                // Line separator
-                doc.line(20, 45, 190, 45);
-                
-                let yPosition = 55;
-                const pageHeight = doc.internal.pageSize.height;
-                const margin = 20;
-                const lineHeight = 6;
-                
-                chatHistory.forEach((msg, index) => {
-                    const timestamp = new Date(msg.timestamp);
-                    const speaker = msg.isUser ? 'YOU' : 'JAMES BELL BOT';
-                    
-                    // Check if we need a new page
-                    if (yPosition > pageHeight - 40) {
-                        doc.addPage();
-                        yPosition = 20;
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
-                    
-                    // Speaker and timestamp
-                    doc.setFont(undefined, 'bold');
-                    doc.setFontSize(9);
-                    doc.text(`[${timestamp.toLocaleTimeString()}] ${speaker}:`, margin, yPosition);
-                    yPosition += lineHeight;
-                    
-                    // Message content
-                    doc.setFont(undefined, 'normal');
-                    doc.setFontSize(9);
-                    const splitText = doc.splitTextToSize(msg.content, 170);
-                    doc.text(splitText, margin, yPosition);
-                    yPosition += splitText.length * lineHeight + 5;
-                });
-                
-                // Footer
-                if (yPosition > pageHeight - 30) {
-                    doc.addPage();
-                    yPosition = 20;
                 }
-                doc.line(20, yPosition, 190, yPosition);
-                yPosition += 10;
-                doc.setFontSize(8);
-                doc.text('This chat was generated by James Bell\'s AI assistant.', margin, yPosition);
-                doc.text('For more information: LinkedIn.com/in/james-bell-tam', margin, yPosition + 5);
-                
-                // Save the PDF
-                const fileName = `james-bell-chat-${new Date().toISOString().split('T')[0]}.pdf`;
-                doc.save(fileName);
-                
-            } catch (error) {
-                console.error('PDF export error:', error);
-                alert('PDF export failed. Please try again or use the text export option.');
-            }
-        }
-        
-        function exportToWord() {
-            try {
-                const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docx;
-                
-                const now = new Date();
-                
-                // Create document sections
-                const children = [];
-                
-                // Header
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "Chat with James Bell AI Assistant",
-                                bold: true,
-                                size: 32
-                            })
-                        ],
-                        heading: HeadingLevel.HEADING_1,
-                        alignment: AlignmentType.CENTER
-                    })
-                );
-                
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: `Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`,
-                                size: 20
-                            })
-                        ],
-                        spacing: { after: 200 }
-                    })
-                );
-                
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "Contact Information:",
-                                bold: true,
-                                size: 22
-                            })
-                        ]
-                    })
-                );
-                
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "LinkedIn: https://www.linkedin.com/in/james-bell-tam",
-                                size: 20
-                            })
-                        ]
-                    })
-                );
-                
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "Email: jamesbellworkrelated@gmail.com",
-                                size: 20
-                            })
-                        ],
-                        spacing: { after: 400 }
-                    })
-                );
-                
-                // Chat messages
-                chatHistory.forEach((msg, index) => {
-                    const timestamp = new Date(msg.timestamp);
-                    const speaker = msg.isUser ? 'YOU' : 'JAMES BELL BOT';
-                    
-                    children.push(
-                        new Paragraph({
-                            children: [
-                                new TextRun({
-                                    text: `[${timestamp.toLocaleTimeString()}] ${speaker}:`,
-                                    bold: true,
-                                    size: 20
-                                })
-                            ],
-                            spacing: { before: 200 }
-                        })
-                    );
-                    
-                    children.push(
-                        new Paragraph({
-                            children: [
-                                new TextRun({
-                                    text: msg.content,
-                                    size: 20
-                                })
-                            ],
-                            spacing: { after: 200 }
-                        })
-                    );
-                });
-                
-                // Footer
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "This chat was generated by James Bell's AI assistant.",
-                                italics: true,
-                                size: 18
-                            })
-                        ],
-                        spacing: { before: 400 }
-                    })
-                );
-                
-                children.push(
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "For more information or to continue the conversation, please contact James directly.",
-                                italics: true,
-                                size: 18
-                            })
-                        ]
-                    })
-                );
-                
-                const doc = new Document({
-                    sections: [{
-                        properties: {},
-                        children: children
-                    }]
-                });
-                
-                // Generate and save the document
-                Packer.toBlob(doc).then(blob => {
-                    const fileName = `james-bell-chat-${new Date().toISOString().split('T')[0]}.docx`;
-                    saveAs(blob, fileName);
-                });
-                
-            } catch (error) {
-                console.error('Word export error:', error);
-                alert('Word export failed. Please try again or use the text export option.');
-            }
-        }
-        
-        function generateExportContent() {
-            const now = new Date();
-            let content = `CHAT WITH JAMES BELL AI ASSISTANT\n`;
-            content += `Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}\n`;
-            content += `Contact: LinkedIn - https://www.linkedin.com/in/james-bell-tam\n`;
-            content += `Contact: Email - jamesbellworkrelated@gmail.com\n`;
-            content += `\n${'='.repeat(60)}\n\n`;
-            
-            chatHistory.forEach((msg, index) => {
-                const timestamp = new Date(msg.timestamp);
-                const speaker = msg.isUser ? 'YOU' : 'JAMES BELL BOT';
-                content += `[${timestamp.toLocaleTimeString()}] ${speaker}:\n`;
-                content += `${msg.content}\n\n`;
             });
-            
-            content += `${'='.repeat(60)}\n`;
-            content += `End of conversation\n`;
-            content += `\nThis chat was generated by James Bell's AI assistant.\n`;
-            content += `For more information or to continue the conversation:\n`;
-            content += `LinkedIn: https://www.linkedin.com/in/james-bell-tam\n`;
-            content += `Email: jamesbellworkrelated@gmail.com`;
-            
-            return content;
-        }
-        
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // Show brief confirmation
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #667eea;
-                    color: white;
-                    padding: 8px 16px;
-                    border-radius: 6px;
-                    font-size: 14px;
-                    z-index: 1000;
-                    animation: fadeInOut 2s ease-in-out;
-                `;
-                notification.textContent = 'Copied to clipboard!';
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 2000);
-            }).catch(() => {
-                alert('Failed to copy to clipboard');
-            });
-        }
-        
-        function addFollowUpSuggestions(botMessage) {
-            // Generate contextual follow-up questions based on the bot's response
-            const followUps = generateFollowUps(botMessage);
-            
-            if (followUps.length > 0) {
-                const followUpDiv = document.createElement('div');
-                followUpDiv.className = 'follow-up-suggestions';
-                
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'follow-up-title';
-                titleDiv.textContent = 'You might also want to ask:';
-                
-                const questionsDiv = document.createElement('div');
-                questionsDiv.className = 'follow-up-questions';
-                
-                followUps.forEach(question => {
-                    const questionBtn = document.createElement('button');
-                    questionBtn.className = 'follow-up-question';
-                    questionBtn.textContent = question;
-                    questionBtn.onclick = () => {
-                        messageInput.value = question;
-                        sendMessage();
-                        followUpDiv.remove();
-                    };
-                    questionsDiv.appendChild(questionBtn);
-                });
-                
-                followUpDiv.appendChild(titleDiv);
-                followUpDiv.appendChild(questionsDiv);
-                chatMessages.appendChild(followUpDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 10, 10, 0.98)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 10, 0.95)';
             }
-        }
-        
-        function generateFollowUps(botMessage) {
-            const followUpMap = {
-                'arctic wolf': [
-                    'How fast were you promoted at Arctic Wolf?',
-                    'What does your team at Arctic Wolf focus on?'
-                ],
-                'customer': [
-                    'Can you give an example of turning around a challenging customer?',
-                    'How do you measure success with customers?'
-                ],
-                'leadership': [
-                    'Have you mentored other team members?',
-                    'How do you handle multiple competing priorities?'
-                ],
-                'technical': [
-                    'What scripting languages do you use?',
-                    'What cloud platforms have you worked with?'
-                ],
-                'ai': [
-                    'What is your stance on using AI in work?',
-                    'Tell me about your AI career goals'
-                ],
-                'security': [
-                    'What kind of security issues do you handle?',
-                    'How do you approach post-incident recovery?'
-                ]
-            };
-            
-            const message = botMessage.toLowerCase();
-            const suggestions = [];
-            
-            for (const [keyword, questions] of Object.entries(followUpMap)) {
-                if (message.includes(keyword)) {
-                    suggestions.push(...questions.slice(0, 2)); // Max 2 per category
-                }
-            }
-            
-            // Remove duplicates and limit to 3 total
-            return [...new Set(suggestions)].slice(0, 3);
-        }
-        
-        // Add CSS animation for notifications
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInOut {
-                0% { opacity: 0; transform: translateY(-10px); }
-                20% { opacity: 1; transform: translateY(0); }
-                80% { opacity: 1; transform: translateY(0); }
-                100% { opacity: 0; transform: translateY(-10px); }
-            }
-        `;
-        document.head.appendChild(style);
+        });
     </script>
 </body>
 </html>

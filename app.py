@@ -199,6 +199,12 @@ class ChatResponse(BaseModel):
 def health_check():
     return {"status": "ok"}
 
+@app.get("/")
+def serve_portfolio():
+    """Serve the main portfolio page at the root URL"""
+    from fastapi.responses import FileResponse
+    return FileResponse("index.html")
+
 
 @app.post("/chat", response_model=ChatResponse)
 def chat_endpoint(payload: ChatRequest):
