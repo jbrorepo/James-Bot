@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Bell - Concierge Security Engineer & AI Innovator</title>
+    <meta name="description" content="James Bell is a Concierge Security Engineer 3 & Team Lead at Arctic Wolf, specializing in cloud security, customer success, and AI-driven solutions.">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="James Bell - Security Engineer & AI Innovator">
+    <meta property="og:description" content="Leading security teams at Arctic Wolf while pioneering AI solutions. Chat with my AI assistant to learn more.">
+    <meta property="og:url" content="https://jamesbell.dev">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.1) 0%, rgba(10, 10, 10, 1) 70%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            border: 4px solid #2a2a2a;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .hero-content .description {
+            font-size: 1.1rem;
+            color: #d0d0d0;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #e0e0e0;
+            border: 2px solid #333;
+        }
+
+        .btn-secondary:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* AI Chat Preview */
+        .chat-preview {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2a2a2a;
+        }
+
+        .chat-header-preview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .chat-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .chat-info p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .chat-messages-preview {
+            space-y: 1rem;
+        }
+
+        .message-preview {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-preview.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar-preview {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-preview.user .message-avatar-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message-preview.assistant .message-avatar-preview {
+            background: #2a2a2a;
+            color: #667eea;
+        }
+
+        .message-content-preview {
+            background: #2a2a2a;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .message-preview.user .message-content-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .try-chat-btn {
+            width: 100%;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Experience Cards */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .experience-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .experience-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+        }
+
+        .experience-card .company {
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .experience-card .description {
+            color: #d0d0d0;
+            line-height: 1.6;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #2a2a2a;
+        }
+
+        .skill-category h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #333;
+        }
+
+        /* Achievement Cards */
+        .achievement-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .achievement-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-label {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Project Tech Tags */
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Education Items */
+        .education-item {
+            padding: 1.5rem;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+        }
+
+        /* Chat Modal */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-modal-content {
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
+            max-height: 600px;
+            background: #1a1a1a;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #2a2a2a;
+            border: none;
+            color: #e0e0e0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">James Bell</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>James Bell</h1>
+                <p class="subtitle">Concierge Security Engineer 3 & Team Lead</p>
+                <p class="description">
+                    Leading security teams at Arctic Wolf while pioneering AI-driven solutions. 
+                    I specialize in cloud security hardening, customer success, and building 
+                    intelligent systems that enhance human capabilities.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" onclick="openChat()">
+                        🤖 Chat with My AI Assistant
+                    </a>
+                    <a href="https://www.linkedin.com/in/james-bell-tam" class="btn btn-secondary" target="_blank">
+                        💼 View LinkedIn
+                    </a>
+                    <a href="https://calendly.com/jamesbellworkrelated" class="btn btn-secondary" target="_blank">
+                        📅 Schedule Call
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="profile-image" id="profileImage">
+                    <img src="james-headshot.jpg" alt="James Bell - Concierge Security Engineer 3 & Team Lead at Arctic Wolf">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: start;">
+                <div>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #d0d0d0; margin-bottom: 2rem;">
+                        I'm a security engineer who believes technology should enhance human capabilities, not replace them. 
+                        At Arctic Wolf, I lead a team of three engineers supporting over 120 customers, focusing on proactive 
+                        security posture improvements and rapid incident recovery.
+                    </p>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: #d0d0d0; margin-bottom: 2rem;">
+                        My journey from individual contributor to team lead in just over a year demonstrates my commitment 
+                        to excellence and continuous learning. I'm passionate about AI-driven solutions and have built 
+                        several projects, including this very AI assistant you can chat with.
+                    </p>
+                    <div class="achievements-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        <div class="achievement-card">
+                            <div class="achievement-number">120+</div>
+                            <div class="achievement-label">Customers Supported</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-number">95-100%</div>
+                            <div class="achievement-label">Customer Satisfaction</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-number">13 Months</div>
+                            <div class="achievement-label">Promotion Timeline</div>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-number">3</div>
+                            <div class="achievement-label">Team Members Led</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-preview">
+                <div class="chat-header-preview">
+                    <div class="chat-avatar">JB</div>
+                    <div class="chat-info">
+                        <h3>AI Assistant</h3>
+                        <p>Ask me anything about James's experience</p>
+                    </div>
+                </div>
+                <div class="chat-messages-preview">
+                    <div class="message-preview user">
+                        <div class="message-avatar-preview">You</div>
+                        <div class="message-content-preview">
+                            What's your current role at Arctic Wolf?
+                        </div>
+                    </div>
+                    <div class="message-preview assistant">
+                        <div class="message-avatar-preview">JB</div>
+                        <div class="message-content-preview">
+                            I'm a Concierge Security Engineer 3 and Team Lead at Arctic Wolf. I lead a team of three engineers supporting 120+ customers with security posture reviews, log troubleshooting, and post-incident recovery...
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="btn btn-primary try-chat-btn" onclick="openChat()">
+                    Try the AI Assistant
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section" style="background: #0f0f0f;">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>🤖 AI Resume Assistant</h3>
+                    <p class="company">Personal Project • 2025</p>
+                    <p class="description">
+                        Built this interactive AI assistant using GPT-5.1, FastAPI, and retrieval-augmented generation. 
+                        Features semantic search over curated Q&A data, strict factual constraints, and professional 
+                        export capabilities. Demonstrates modern AI development practices.
+                    </p>
+                    <div class="project-tech">
+                        <span class="skill-tag">GPT-5.1</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">RAG</span>
+                        <span class="skill-tag">JavaScript</span>
+                    </div>
+                </div>
+                <div class="experience-card">
+                    <h3>🎮 Card Recognition AI</h3>
+                    <p class="company">Riftbound Trading Card Game • Ongoing</p>
+                    <p class="description">
+                        Developing OCR and image recognition system for trading card identification and auto-parsing. 
+                        Combines computer vision with practical gaming applications, showcasing AI's potential in 
+                        entertainment and hobby industries.
+                    </p>
+                    <div class="project-tech">
+                        <span class="skill-tag">OCR</span>
+                        <span class="skill-tag">Computer Vision</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Image Processing</span>
+                    </div>
+                </div>
+                <div class="experience-card">
+                    <h3>🔧 Customer Automation Tools</h3>
+                    <p class="company">Arctic Wolf • 2024-2025</p>
+                    <p class="description">
+                        Created Python and PowerShell scripts for bulk account management, log parsing automation, 
+                        and customer workflow optimization. Reduced manual tasks by 60% and improved team efficiency 
+                        across 120+ customer accounts.
+                    </p>
+                    <div class="project-tech">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">PowerShell</span>
+                        <span class="skill-tag">Automation</span>
+                        <span class="skill-tag">APIs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section id="education" class="section">
+        <div class="container">
+            <h2 class="section-title">Education & Growth</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 1.5rem; font-size: 1.3rem;">Continuous Learning</h3>
+                    <div class="education-item" style="margin-bottom: 2rem;">
+                        <h4 style="color: #e0e0e0; margin-bottom: 0.5rem;">Creative Writing & Technical Studies</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 0.5rem;">Ongoing Education</p>
+                        <p style="color: #d0d0d0; font-size: 0.95rem;">
+                            Pursuing formal education in creative writing and technical studies, demonstrating 
+                            commitment to both analytical and creative thinking.
+                        </p>
+                    </div>
+                    <div class="education-item">
+                        <h4 style="color: #e0e0e0; margin-bottom: 0.5rem;">Professional Development</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 0.5rem;">Self-Directed Learning</p>
+                        <p style="color: #d0d0d0; font-size: 0.95rem;">
+                            Advanced career in technology through hands-on experience, mentorship, and continuous 
+                            skill development rather than traditional linear academic path.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 1.5rem; font-size: 1.3rem;">Key Influences</h3>
+                    <div class="education-item">
+                        <h4 style="color: #e0e0e0; margin-bottom: 0.5rem;">Mrs. Lana Hall</h4>
+                        <p style="color: #b0b0b0; margin-bottom: 0.5rem;">High School Debate Teacher</p>
+                        <p style="color: #d0d0d0; font-size: 0.95rem;">
+                            Taught practical life skills including resume building, interviewing, and professional 
+                            presentation. Her guidance shaped my approach to communication and career development.
+                        </p>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h4 style="color: #e0e0e0; margin-bottom: 1rem;">Core Values</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <span class="skill-tag">Kindness</span>
+                            <span class="skill-tag">Ownership</span>
+                            <span class="skill-tag">Curiosity</span>
+                            <span class="skill-tag">Continuous Learning</span>
+                            <span class="skill-tag">Empathy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>Concierge Security Engineer 3 & Team Lead</h3>
+                    <p class="company">Arctic Wolf • May 2024 - Present</p>
+                    <p class="description">
+                        Leading a team of 3 engineers supporting 120+ customers. Performing deep log-source analysis, 
+                        cloud security hardening across AWS, Azure, and GCP, and proactive security posture reviews. 
+                        Promoted to Team Lead in June 2025 after exceptional performance.
+                    </p>
+                </div>
+                <div class="experience-card">
+                    <h3>Customer Technical Engineer</h3>
+                    <p class="company">Alert Logic by Fortra • Previous Role</p>
+                    <p class="description">
+                        Owned technical relationships for enterprise accounts, handled escalated security issues, 
+                        and guided customers through best practices. Consistently maintained 95-100% CSAT scores 
+                        across managed accounts.
+                    </p>
+                </div>
+                <div class="experience-card">
+                    <h3>AI Innovation Projects</h3>
+                    <p class="company">Personal Development • Ongoing</p>
+                    <p class="description">
+                        Building AI-powered solutions including this resume assistant using GPT-5.1, FastAPI, 
+                        and retrieval-augmented generation. Also developing OCR and image recognition systems 
+                        for trading card game applications.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title">Technical Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>🔒 Security & Cloud</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">AWS Security</span>
+                        <span class="skill-tag">Azure Security</span>
+                        <span class="skill-tag">GCP Security</span>
+                        <span class="skill-tag">IAM Reviews</span>
+                        <span class="skill-tag">Log Analysis</span>
+                        <span class="skill-tag">Incident Response</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>💻 Programming & Automation</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">PowerShell</span>
+                        <span class="skill-tag">Bash</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">Automation</span>
+                        <span class="skill-tag">Scripting</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>🤖 AI & Modern Tech</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">GPT-5.1</span>
+                        <span class="skill-tag">OpenAI APIs</span>
+                        <span class="skill-tag">RAG Systems</span>
+                        <span class="skill-tag">OCR</span>
+                        <span class="skill-tag">Image Recognition</span>
+                        <span class="skill-tag">Embeddings</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>👥 Leadership & Customer Success</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Team Leadership</span>
+                        <span class="skill-tag">Customer Success</span>
+                        <span class="skill-tag">Technical Account Management</span>
+                        <span class="skill-tag">Mentoring</span>
+                        <span class="skill-tag">Stakeholder Management</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Let's Connect</h2>
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #d0d0d0;">
+                    Ready to discuss how I can contribute to your team? Start with my AI assistant 
+                    or reach out directly through your preferred channel.
+                </p>
+                <div class="cta-buttons" style="justify-content: center;">
+                    <a href="#" class="btn btn-primary" onclick="openChat()">
+                        🤖 Chat with AI Assistant
+                    </a>
+                    <a href="https://calendly.com/jamesbellworkrelated" class="btn btn-secondary" target="_blank">
+                        📅 Schedule Call
+                    </a>
+                    <a href="https://www.linkedin.com/in/james-bell-tam" class="btn btn-secondary" target="_blank">
+                        💼 LinkedIn
+                    </a>
+                    <a href="mailto:jamesbellworkrelated@gmail.com" class="btn btn-secondary">
+                        ✉️ Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://www.linkedin.com/in/james-bell-tam" target="_blank">LinkedIn</a>
+                <a href="mailto:jamesbellworkrelated@gmail.com">Email</a>
+                <a href="https://calendly.com/jamesbellworkrelated" target="_blank">Schedule Call</a>
+            </div>
+            <p style="color: #666;">
+                © 2025 James Bell. Built with AI assistance using GPT-5.1 and modern web technologies.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Chat Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-modal-content">
+            <button class="chat-close" onclick="closeChat()">×</button>
+            <iframe src="index.html" class="chat-iframe" id="chatIframe"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openChat() {
+            document.getElementById('chatModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeChat() {
+            document.getElementById('chatModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('chatModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeChat();
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 10, 10, 0.98)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 10, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
