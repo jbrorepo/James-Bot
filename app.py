@@ -17,6 +17,8 @@ from typing import List, Dict, Any
 import yaml
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 
@@ -185,6 +187,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files (for serving HTML, CSS, JS, images)
+app.mount("/static", StaticFiles(directory="."), name="static")
+
 
 class ChatRequest(BaseModel):
     message: str
@@ -202,8 +207,22 @@ def health_check():
 @app.get("/")
 def serve_portfolio():
     """Serve the main portfolio page at the root URL"""
-    from fastapi.responses import FileResponse
     return FileResponse("index.html")
+
+@app.get("/chat.html")
+def serve_chat():
+    """Serve the AI chat interface"""
+    return FileResponse("chat.html")
+
+@app.get("/portfolio.html")
+def serve_portfolio_backup():
+    """Serve the backup portfolio page"""
+    return FileResponse("portfolio.html")
+
+@app.get("/james-headshot.jpg")
+def serve_headshot():
+    """Serve the headshot image"""
+    return FileResponse("james-headshot.jpg")
 
 
 @app.post("/chat", response_model=ChatResponse)
