@@ -2,13 +2,28 @@
 import json
 import os
 from typing import List, Dict, Any
+from datetime import datetime
+import logging
 
 import yaml
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from openai import OpenAI
+
+# Set up logging for analytics
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Simple in-memory analytics (in production, use a database)
+analytics_data = {
+    "page_views": 0,
+    "chat_interactions": 0,
+    "resume_downloads": 0,
+    "visitors": [],
+    "chat_sessions": []
+}
 
 # ---------- Config & Data Loading ----------
 
@@ -79,19 +94,84 @@ def health_check():
         "model": llm_model if client else "not configured"
     }
 
+@app.get("/analytics")
+def get_analytics():
+    """Analytics dashboard - basic stats"""
+    recent_visitors = analytics_data["visitors"][-10:]  # Last 10 visitors
+    recent_chats = analytics_data["chat_sessions"][-5:]  # Last 5 chats
+    
+    return {
+        "summary": {
+            "total_page_views": analytics_data["page_views"],
+            "total_chat_interactions": analytics_data["chat_interactions"],
+            "total_resume_downloads": analytics_data["resume_downloads"],
+            "total_visitors": len(analytics_data["visitors"])
+        },
+        "recent_activity": {
+            "recent_visitors": recent_visitors,
+            "recent_chats": recent_chats
+        },
+        "generated_at": datetime.now().isoformat()
+    }
+
 @app.get("/")
-def serve_portfolio():
+def serve_portfolio(request: Request):
     """Serve the main portfolio page"""
+    # Track page view
+    analytics_data["page_views"] += 1
+    visitor_info = {
+        "timestamp": datetime.now().isoformat(),
+        "ip": request.client.host,
+        "user_agent": request.headers.get("user-agent", ""),
+        "page": "portfolio"
+    }
+    analytics_data["visitors"].append(visitor_info)
+    logger.info(f"Portfolio view from {request.client.host}")
+    
     if os.path.exists("index.html"):
         return FileResponse("index.html")
     return {"message": "James Bell Portfolio API", "status": "running", "note": "index.html not found"}
 
 @app.get("/chat.html")
-def serve_chat():
+def serve_chat(request: Request):
     """Serve the AI chat interface"""
+    # Track chat page view
+    visitor_info = {
+        "timestamp": datetime.now().isoformat(),
+        "ip": request.client.host,
+        "user_agent": request.headers.get("user-agent", ""),
+        "page": "chat"
+    }
+    analytics_data["visitors"].append(visitor_info)
+    logger.info(f"Chat page view from {request.client.host}")
+    
     if os.path.exists("chat.html"):
         return FileResponse("chat.html")
     return {"error": "chat.html not found"}
+
+@app.get("/resume")
+def download_resume(request: Request):
+    """Serve downloadable resume"""
+    # Track resume download
+    analytics_data["resume_downloads"] += 1
+    visitor_info = {
+        "timestamp": datetime.now().isoformat(),
+        "ip": request.client.host,
+        "user_agent": request.headers.get("user-agent", ""),
+        "action": "resume_download"
+    }
+    analytics_data["visitors"].append(visitor_info)
+    logger.info(f"Resume download from {request.client.host}")
+    
+    # Check for resume file
+    resume_filename = "James Bell Resume 2025.pdf"
+    if os.path.exists(resume_filename):
+        return FileResponse(resume_filename, 
+                          filename="James_Bell_Resume_2025.pdf",
+                          media_type="application/pdf")
+    
+    # Fallback if file not found
+    return {"message": f"Resume file not found. Please ensure '{resume_filename}' is uploaded to the project."}
 
 @app.get("/james-headshot.jpg")
 def serve_headshot():
@@ -101,8 +181,20 @@ def serve_headshot():
     return {"error": "james-headshot.jpg not found"}
 
 @app.post("/chat", response_model=ChatResponse)
-def chat_endpoint(payload: ChatRequest):
+def chat_endpoint(payload: ChatRequest, request: Request):
     """AI Chat endpoint with fallback logic"""
+    # Track chat interaction
+    analytics_data["chat_interactions"] += 1
+    chat_session = {
+        "timestamp": datetime.now().isoformat(),
+        "ip": request.client.host,
+        "user_agent": request.headers.get("user-agent", ""),
+        "message": payload.message[:100],  # First 100 chars for privacy
+        "message_length": len(payload.message)
+    }
+    analytics_data["chat_sessions"].append(chat_session)
+    logger.info(f"Chat interaction from {request.client.host}: {len(payload.message)} chars")
+    
     try:
         if not client:
             return ChatResponse(reply="AI assistant is currently unavailable. Please contact James directly at jamesbellworkrelated@gmail.com")
