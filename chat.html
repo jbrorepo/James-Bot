@@ -431,10 +431,47 @@
         }
 
         .contact-actions {
-            display: flex;
-            gap: 8px;
             margin-bottom: 16px;
             padding: 0 4px;
+        }
+
+        .contact-toggle {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .contact-toggle:hover {
+            background: #333;
+            border-color: #667eea;
+        }
+
+        .contact-toggle-icon {
+            transition: transform 0.2s;
+        }
+
+        .contact-toggle.expanded .contact-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .contact-buttons {
+            display: none;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .contact-buttons.expanded {
+            display: flex;
         }
 
         .contact-btn {
@@ -538,7 +575,7 @@
                 padding: 6px 10px;
             }
 
-            .contact-actions {
+            .contact-buttons {
                 flex-direction: column;
                 gap: 6px;
             }
@@ -546,6 +583,11 @@
             .contact-btn {
                 font-size: 12px;
                 padding: 8px 12px;
+            }
+
+            .contact-toggle {
+                font-size: 11px;
+                padding: 6px 10px;
             }
 
             .export-btn {
@@ -592,15 +634,21 @@
 
         <div class="chat-input-section">
             <div class="contact-actions" id="contactActions" style="display: none;">
-                <a href="https://calendly.com/jamesbellworkrelated" target="_blank" class="contact-btn">
-                    📅 Schedule Call
-                </a>
-                <a href="https://www.linkedin.com/in/james-bell-tam" target="_blank" class="contact-btn">
-                    💼 Connect on LinkedIn
-                </a>
-                <a href="mailto:jamesbellworkrelated@gmail.com?subject=Following up on our AI chat&body=Hi James,%0D%0A%0D%0AI just finished chatting with your AI assistant and would like to continue our conversation.%0D%0A%0D%0ABest regards," class="contact-btn">
-                    ✉️ Send Email
-                </a>
+                <button class="contact-toggle" onclick="toggleContactOptions()">
+                    <span>📞 Contact James</span>
+                    <span class="contact-toggle-icon">▼</span>
+                </button>
+                <div class="contact-buttons" id="contactButtons">
+                    <a href="https://calendly.com/jamesbellworkrelated" target="_blank" class="contact-btn">
+                        📅 Schedule Call
+                    </a>
+                    <a href="https://www.linkedin.com/in/james-bell-tam" target="_blank" class="contact-btn">
+                        💼 LinkedIn
+                    </a>
+                    <a href="mailto:jamesbellworkrelated@gmail.com?subject=Following up on our AI chat&body=Hi James,%0D%0A%0D%0AI just finished chatting with your AI assistant and would like to continue our conversation.%0D%0A%0D%0ABest regards," class="contact-btn">
+                        ✉️ Email
+                    </a>
+                </div>
             </div>
             
             <div class="export-controls" id="exportControls" style="display: none;">
@@ -699,8 +747,8 @@
             const emptyState = chatMessages.querySelector('.empty-state');
             if (emptyState) {
                 emptyState.remove();
-                exportControls.style.display = 'flex';
-                document.getElementById('contactActions').style.display = 'flex';
+                exportControls.style.display = 'block';
+                document.getElementById('contactActions').style.display = 'block';
             }
 
             const messageDiv = document.createElement('div');
@@ -762,7 +810,8 @@
                 addMessage(msg.content, msg.isUser, false);
             });
             if (chatHistory.length > 0) {
-                exportControls.style.display = 'flex';
+                exportControls.style.display = 'block';
+                document.getElementById('contactActions').style.display = 'block';
             }
         }
 
@@ -855,6 +904,7 @@
                     </div>
                 `;
                 exportControls.style.display = 'none';
+                document.getElementById('contactActions').style.display = 'none';
             }
         }
         
@@ -1217,6 +1267,14 @@
             
             toggle.classList.toggle('expanded');
             grid.classList.toggle('expanded');
+        }
+        
+        function toggleContactOptions() {
+            const toggle = document.querySelector('.contact-toggle');
+            const buttons = document.getElementById('contactButtons');
+            
+            toggle.classList.toggle('expanded');
+            buttons.classList.toggle('expanded');
         }
         
         // Auto-collapse suggestions after sending a message
