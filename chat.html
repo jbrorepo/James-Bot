@@ -143,6 +143,30 @@
             border-bottom-left-radius: 4px;
         }
 
+        .message-content strong {
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+
+        .message-content em {
+            font-style: italic;
+            color: #d0d0d0;
+        }
+
+        .message-content code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message-content a {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        .message-content a:hover {
+            color: #8fa4f3;
+        }
+
         .typing-indicator {
             display: none;
             gap: 4px;
@@ -760,7 +784,13 @@
             
             const messageContent = document.createElement('div');
             messageContent.className = 'message-content';
-            messageContent.textContent = content;
+            
+            // Parse markdown formatting for bot messages
+            if (!isUser) {
+                messageContent.innerHTML = parseMarkdown(content);
+            } else {
+                messageContent.textContent = content;
+            }
             
             // Add timestamp
             const timestamp = new Date();
@@ -949,10 +979,15 @@
                     doc.text(`[${timestamp.toLocaleTimeString()}] ${speaker}:`, margin, yPosition);
                     yPosition += lineHeight;
                     
-                    // Message content
+                    // Message content (strip markdown for PDF)
                     doc.setFont(undefined, 'normal');
                     doc.setFontSize(9);
-                    const splitText = doc.splitTextToSize(msg.content, 170);
+                    const cleanContent = msg.content
+                        .replace(/\*\*(.*?)\*\*/g, '$1')  // Remove bold markers
+                        .replace(/\*(.*?)\*/g, '$1')      // Remove italic markers
+                        .replace(/`(.*?)`/g, '$1')        // Remove code markers
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Keep link text only
+                    const splitText = doc.splitTextToSize(cleanContent, 170);
                     doc.text(splitText, margin, yPosition);
                     yPosition += splitText.length * lineHeight + 5;
                 });
@@ -1067,11 +1102,18 @@
                         })
                     );
                     
+                    // Parse content for Word export (basic formatting)
+                    const cleanContent = msg.content
+                        .replace(/\*\*(.*?)\*\*/g, '$1')  // Remove bold markers for now
+                        .replace(/\*(.*?)\*/g, '$1')      // Remove italic markers
+                        .replace(/`(.*?)`/g, '$1')        // Remove code markers
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Keep link text only
+                    
                     children.push(
                         new Paragraph({
                             children: [
                                 new TextRun({
-                                    text: msg.content,
+                                    text: cleanContent,
                                     size: 20
                                 })
                             ],
@@ -1252,6 +1294,25 @@
             return [...new Set(suggestions)].slice(0, 3);
         }
         
+        // Simple markdown parser for bot messages
+        function parseMarkdown(text) {
+            return text
+                // Bold text: **text** or __text__
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/__(.*?)__/g, '<strong>$1</strong>')
+                // Italic text: *text* or _text_
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/_(.*?)_/g, '<em>$1</em>')
+                // Code: `code`
+                .replace(/`(.*?)`/g, '<code style="background: #333; padding: 2px 4px; border-radius: 3px; font-family: monospace;">$1</code>')
+                // Line breaks
+                .replace(/\n/g, '<br>')
+                // Bullet points: • or -
+                .replace(/^[•\-]\s+(.+)$/gm, '<div style="margin-left: 16px;">• $1</div>')
+                // Links (basic): [text](url)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: #667eea; text-decoration: underline;">$1</a>');
+        }
+
         // Toggle functions for collapsible sections
         function toggleExportOptions() {
             const toggle = document.querySelector('.export-toggle');
