@@ -445,28 +445,43 @@ What would you like to know about James?"""
         
         # Use the match if we found a good one
         if best_match and best_score > 0:
-            context = f"Based on this Q&A: Q: {best_match['question']} A: {best_match['answer']}"
+            context = f"""FACTUAL CONTENT ONLY - DO NOT ADD EXAMPLES OR DETAILS:
+
+Q: {best_match['question']}
+A: {best_match['answer']}
+
+You must answer using ONLY the information above. Do not create examples, scenarios, or elaborate beyond what is explicitly provided."""
             
-            # More direct system prompt for Q&A responses
-            focused_prompt = """You are James Bell's AI assistant. Answer the user's question directly using the provided Q&A information. Be conversational but focus on providing the specific information requested. Use the Q&A content as your primary source and expand naturally while staying factual."""
+            # Strict anti-hallucination prompt
+            focused_prompt = """You are James Bell's AI assistant. You must ONLY use information from the provided Q&A content. 
+
+CRITICAL RULES:
+- Answer ONLY using the exact information provided in the Q&A
+- DO NOT create examples, scenarios, or detailed stories not in the Q&A
+- DO NOT elaborate beyond what is explicitly stated
+- If the Q&A doesn't contain specific details, do not invent them
+- Keep responses factual and based solely on the provided content
+
+Use the Q&A information to answer directly and concisely."""
             
             messages = [
                 {"role": "system", "content": f"{focused_prompt}\n\n{context}"},
                 {"role": "user", "content": payload.message}
             ]
             
-            # Use max_completion_tokens for GPT-5.1 and newer models
+            # Use very low temperature to prevent hallucinations
             completion_params = {
                 "model": llm_model,
                 "messages": messages,
-                "temperature": config["llm"]["config"]["temperature"],
-                "top_p": config["llm"]["config"]["top_p"],
+                "temperature": 0.1,  # Much lower temperature for factual responses
+                "top_p": 0.8,        # Lower top_p to reduce creativity
             }
             
+            # Use shorter responses to prevent elaboration
             if "gpt-5" in llm_model.lower() or "o3" in llm_model.lower():
-                completion_params["max_completion_tokens"] = config["llm"]["config"]["max_tokens"]
+                completion_params["max_completion_tokens"] = 300  # Much shorter to prevent hallucinations
             else:
-                completion_params["max_tokens"] = config["llm"]["config"]["max_tokens"]
+                completion_params["max_tokens"] = 300
             
             resp = client.chat.completions.create(**completion_params)
             bot_response = resp.choices[0].message.content.strip()
