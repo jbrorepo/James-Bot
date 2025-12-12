@@ -353,15 +353,9 @@ def chat_endpoint(payload: ChatRequest, request: Request):
         # Handle conversational patterns and Q&A matching
         message = payload.message.lower().strip()
         
-        # Handle greetings and basic conversation
-        greeting_patterns = ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings', 'howdy']
-        thanks_patterns = ['thank you', 'thanks', 'appreciate it', 'thx', 'ty']
-        goodbye_patterns = ['bye', 'goodbye', 'see you', 'farewell', 'take care', 'later', 'ttyl']
-        help_patterns = ['help', 'what can you do', 'what do you know', 'how does this work']
-        who_patterns = ['who are you', 'what are you', 'tell me about yourself', 'introduce yourself']
-        
-        # Check for conversational patterns first
-        if any(pattern in message for pattern in greeting_patterns):
+        # Handle ONLY specific conversational patterns (more restrictive)
+        # Only trigger on standalone greetings, not questions about James
+        if message in ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings', 'howdy'] or message.startswith('hello ') or message.startswith('hi '):
             greeting_response = """Hello! I'm James Bell's AI assistant, designed to answer questions about his professional background and experience. I only provide information that's been verified and documented in my knowledge base - no fabrications or assumptions.
 
 I can tell you about James's current role as a Concierge Security Engineer 3 & Team Lead at Arctic Wolf, his technical skills, leadership experience, customer success approach, and AI career goals.
@@ -372,21 +366,21 @@ What would you like to know about James's background?"""
             log_conversation(session_id, payload.message, greeting_response, request)
             return ChatResponse(reply=greeting_response)
         
-        elif any(pattern in message for pattern in thanks_patterns):
+        elif message in ['thank you', 'thanks', 'appreciate it', 'thx', 'ty'] or 'thank you' in message and len(message.split()) <= 3:
             thanks_response = "You're welcome! Feel free to ask me anything else about James's experience, or you can contact him directly at jamesbellworkrelated@gmail.com or connect on LinkedIn at https://www.linkedin.com/in/james-bell-tam"
             
             # Log the conversation turn
             log_conversation(session_id, payload.message, thanks_response, request)
             return ChatResponse(reply=thanks_response)
         
-        elif any(pattern in message for pattern in goodbye_patterns):
+        elif message in ['bye', 'goodbye', 'see you', 'farewell', 'take care', 'later', 'ttyl', 'good bye']:
             goodbye_response = "Thanks for chatting! If you'd like to continue the conversation with James directly, you can reach him at jamesbellworkrelated@gmail.com or schedule a call at https://calendly.com/jamesbellworkrelated. Have a great day!"
             
             # Log the conversation turn
             log_conversation(session_id, payload.message, goodbye_response, request)
             return ChatResponse(reply=goodbye_response)
         
-        elif any(pattern in message for pattern in help_patterns):
+        elif message in ['help', 'what can you do', 'what do you know', 'how does this work'] or message == 'help me':
             help_response = """I'm here to answer questions about James Bell's professional background! I can tell you about:
 
 • His current role as Concierge Security Engineer 3 & Team Lead at Arctic Wolf
@@ -401,7 +395,7 @@ I only share verified information from my knowledge base - no made-up details. W
             log_conversation(session_id, payload.message, help_response, request)
             return ChatResponse(reply=help_response)
         
-        elif any(pattern in message for pattern in who_patterns):
+        elif message in ['who are you', 'what are you', 'tell me about yourself', 'introduce yourself'] or message.startswith('who are you'):
             intro_response = """I'm James Bell's AI assistant! I was actually built by James himself as a demonstration of his AI development skills. 
 
 I'm designed to answer questions about James's professional background using only verified information from a curated knowledge base. I can tell you about his role at Arctic Wolf, his technical expertise, leadership experience, and career goals.
@@ -414,26 +408,50 @@ What would you like to know about James?"""
             log_conversation(session_id, payload.message, intro_response, request)
             return ChatResponse(reply=intro_response)
         
-        # Find best matching Q&A for substantive questions
+        # Enhanced Q&A matching for substantive questions
         best_match = None
         best_score = 0
         
-        for qa in qa_pairs:
-            question_words = qa["question"].lower().split()
-            message_words = message.split()
-            
-            # Simple word overlap scoring
-            overlap = len(set(question_words) & set(message_words))
-            if overlap > best_score:
-                best_score = overlap
-                best_match = qa
+        # Check for direct keyword matches first
+        role_keywords = ['current role', 'role at arctic wolf', 'what does james do', 'job', 'position', 'work at arctic wolf']
+        for keyword in role_keywords:
+            if keyword in message:
+                for qa in qa_pairs:
+                    if 'current role' in qa["question"].lower() or 'what does james do' in qa["question"].lower():
+                        best_match = qa
+                        best_score = 10  # High score for direct matches
+                        break
+                if best_match:
+                    break
         
-        # If we found a decent match, use it
+        # If no direct match, use semantic matching
+        if not best_match:
+            for qa in qa_pairs:
+                question_words = set(qa["question"].lower().split())
+                message_words = set(message.split())
+                
+                # Enhanced scoring: word overlap + question relevance
+                overlap = len(question_words & message_words)
+                
+                # Boost score for key terms
+                key_terms = ['arctic wolf', 'role', 'job', 'work', 'engineer', 'security', 'team lead', 'leadership', 'customer', 'ai', 'goals', 'experience']
+                key_matches = sum(1 for term in key_terms if term in message and term in qa["question"].lower())
+                
+                total_score = overlap + (key_matches * 2)
+                
+                if total_score > best_score:
+                    best_score = total_score
+                    best_match = qa
+        
+        # Use the match if we found a good one
         if best_match and best_score > 0:
             context = f"Based on this Q&A: Q: {best_match['question']} A: {best_match['answer']}"
             
+            # More direct system prompt for Q&A responses
+            focused_prompt = """You are James Bell's AI assistant. Answer the user's question directly using the provided Q&A information. Be conversational but focus on providing the specific information requested. Use the Q&A content as your primary source and expand naturally while staying factual."""
+            
             messages = [
-                {"role": "system", "content": f"{system_prompt}\n\n{context}"},
+                {"role": "system", "content": f"{focused_prompt}\n\n{context}"},
                 {"role": "user", "content": payload.message}
             ]
             
