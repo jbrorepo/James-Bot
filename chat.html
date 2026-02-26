@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with James Bell</title>
+    
+    <!-- Libraries for export functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            background: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .chat-header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.assistant .message-avatar {
+            background: #2a2a2a;
+            color: #667eea;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant .message-content {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-content strong {
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+
+        .message-content em {
+            font-style: italic;
+            color: #d0d0d0;
+        }
+
+        .message-content code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message-content a {
+            color: #667eea;
+            text-decoration: underline;
+        }
+
+        .message-content a:hover {
+            color: #8fa4f3;
+        }
+
+        .typing-indicator {
+            display: none;
+            gap: 4px;
+            padding: 12px 16px;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px 24px;
+            background: #1a1a1a;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 24px;
+            padding: 12px 20px;
+            color: #e0e0e0;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .chat-input::placeholder {
+            color: #666;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+        }
+
+        .empty-state h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .suggested-questions {
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .suggestions-toggle {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .suggestions-toggle:hover {
+            background: #333;
+            border-color: #667eea;
+        }
+
+        .suggestions-toggle-icon {
+            transition: transform 0.2s;
+        }
+
+        .suggestions-toggle.expanded .suggestions-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .suggestions-grid {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .suggestions-grid.expanded {
+            display: grid;
+        }
+
+        .suggested-question {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+            text-align: center;
+            white-space: normal;
+            line-height: 1.3;
+        }
+
+        .suggested-question:hover {
+            background: #333;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .export-controls {
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .export-toggle {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .export-toggle:hover {
+            background: #333;
+            border-color: #667eea;
+        }
+
+        .export-toggle-icon {
+            transition: transform 0.2s;
+        }
+
+        .export-toggle.expanded .export-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .export-buttons {
+            display: none;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .export-buttons.expanded {
+            display: flex;
+        }
+
+        .export-btn {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .export-btn:hover {
+            background: #333;
+            border-color: #667eea;
+        }
+
+        .export-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .chat-input-section {
+            padding: 20px 24px;
+            background: #1a1a1a;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .message-timestamp {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .message:hover .message-timestamp {
+            opacity: 1;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: #666;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #333;
+            color: #e0e0e0;
+        }
+
+        .contact-actions {
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .contact-toggle {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .contact-toggle:hover {
+            background: #333;
+            border-color: #667eea;
+        }
+
+        .contact-toggle-icon {
+            transition: transform 0.2s;
+        }
+
+        .contact-toggle.expanded .contact-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .contact-buttons {
+            display: none;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .contact-buttons.expanded {
+            display: flex;
+        }
+
+        .contact-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .follow-up-suggestions {
+            margin-top: 12px;
+            padding: 12px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .follow-up-title {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .follow-up-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .follow-up-question {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .follow-up-question:hover {
+            background: #333;
+            border-color: #667eea;
+        }
+
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 100vh;
+                border-radius: 0;
+                margin: 0;
+            }
+
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .suggested-question {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .contact-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .contact-toggle {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .export-btn {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .chat-input-section {
+                padding: 16px 20px;
+            }
+
+            .export-toggle, .suggestions-toggle {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1>James Bell</h1>
+                    <p>Concierge Security Engineer 3 & Team Lead | Arctic Wolf</p>
+                </div>
+                <a href="/" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px; font-size: 14px;">
+                    ← Back to Portfolio
+                </a>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="empty-state">
+                <h2>👋 Hi, I'm James</h2>
+                <p>Ask me anything about my experience, skills, or background.<br>I'm here to help you learn more about what I can bring to your team.</p>
+
+            </div>
+        </div>
+
+        <div class="chat-input-section">
+            <div class="contact-actions" id="contactActions" style="display: none;">
+                <button class="contact-toggle" onclick="toggleContactOptions()">
+                    <span>📞 Contact James</span>
+                    <span class="contact-toggle-icon">▼</span>
+                </button>
+                <div class="contact-buttons" id="contactButtons">
+                    <a href="https://calendly.com/jamesbellworkrelated" target="_blank" class="contact-btn">
+                        📅 Schedule Call
+                    </a>
+                    <a href="https://www.linkedin.com/in/james-bell-tam" target="_blank" class="contact-btn">
+                        💼 LinkedIn
+                    </a>
+                    <a href="mailto:jamesbellworkrelated@gmail.com?subject=Following up on our AI chat&body=Hi James,%0D%0A%0D%0AI just finished chatting with your AI assistant and would like to continue our conversation.%0D%0A%0D%0ABest regards," class="contact-btn">
+                        ✉️ Email
+                    </a>
+                </div>
+            </div>
+            
+            <div class="export-controls" id="exportControls" style="display: none;">
+                <button class="export-toggle" onclick="toggleExportOptions()">
+                    <span>📄 Export Options</span>
+                    <span class="export-toggle-icon">▼</span>
+                </button>
+                <div class="export-buttons" id="exportButtons">
+                    <button class="export-btn" onclick="exportToPDF()">📄 PDF</button>
+                    <button class="export-btn" onclick="exportToWord()">📝 Word</button>
+                    <button class="export-btn" onclick="clearChat()">🗑️ Clear</button>
+                </div>
+            </div>
+            
+            <div class="suggested-questions" id="suggestedQuestions">
+                <button class="suggestions-toggle" onclick="toggleSuggestions()">
+                    <span>💡 Suggested Questions</span>
+                    <span class="suggestions-toggle-icon">▼</span>
+                </button>
+                <div class="suggestions-grid" id="suggestionsGrid">
+                    <button class="suggested-question" onclick="sendSuggestion('What is your current role at Arctic Wolf?')">
+                        Current Role
+                    </button>
+                    <button class="suggested-question" onclick="sendSuggestion('How do you handle difficult customers?')">
+                        Customer Success
+                    </button>
+                    <button class="suggested-question" onclick="sendSuggestion('What technologies do you work with?')">
+                        Technical Skills
+                    </button>
+                    <button class="suggested-question" onclick="sendSuggestion('Tell me about your leadership experience')">
+                        Leadership
+                    </button>
+                    <button class="suggested-question" onclick="sendSuggestion('What are your AI career goals?')">
+                        AI Goals
+                    </button>
+                    <button class="suggested-question" onclick="sendSuggestion('What is your educational background?')">
+                        Education
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-input-wrapper">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="messageInput" 
+                    placeholder="Ask me anything..."
+                    onkeypress="handleKeyPress(event)"
+                >
+                <button class="send-button" id="sendButton" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8000/chat'
+            : '/chat';
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const exportControls = document.getElementById('exportControls');
+        
+        // Chat history storage
+        let chatHistory = [];
+        
+        // Load chat history from localStorage on page load
+        window.addEventListener('load', function() {
+            const savedHistory = localStorage.getItem('jamesBellChatHistory');
+            if (savedHistory) {
+                chatHistory = JSON.parse(savedHistory);
+                restoreChatHistory();
+            }
+        });
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendSuggestion(text) {
+            messageInput.value = text;
+            sendMessage();
+            collapseSuggestions();
+        }
+
+        function addMessage(content, isUser, saveToHistory = true) {
+            // Remove empty state if it exists
+            const emptyState = chatMessages.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+                exportControls.style.display = 'block';
+                document.getElementById('contactActions').style.display = 'block';
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = isUser ? 'You' : 'JB';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            // Parse markdown formatting for bot messages
+            if (!isUser) {
+                messageContent.innerHTML = parseMarkdown(content);
+            } else {
+                messageContent.textContent = content;
+            }
+            
+            // Add timestamp
+            const timestamp = new Date();
+            const timestampDiv = document.createElement('div');
+            timestampDiv.className = 'message-timestamp';
+            timestampDiv.textContent = timestamp.toLocaleTimeString();
+            
+            // Add message actions
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'message-actions';
+            
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'action-btn';
+            copyBtn.textContent = '📋 Copy';
+            copyBtn.onclick = () => copyToClipboard(content);
+            
+            actionsDiv.appendChild(copyBtn);
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            messageContent.appendChild(timestampDiv);
+            messageContent.appendChild(actionsDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Add follow-up suggestions for bot messages
+            if (!isUser && saveToHistory) {
+                addFollowUpSuggestions(content);
+            }
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Save to history and localStorage
+            if (saveToHistory) {
+                const timestampISO = new Date().toISOString();
+                chatHistory.push({
+                    content: content,
+                    isUser: isUser,
+                    timestamp: timestampISO
+                });
+                localStorage.setItem('jamesBellChatHistory', JSON.stringify(chatHistory));
+            }
+        }
+        
+        function restoreChatHistory() {
+            chatHistory.forEach(msg => {
+                addMessage(msg.content, msg.isUser, false);
+            });
+            if (chatHistory.length > 0) {
+                exportControls.style.display = 'block';
+                document.getElementById('contactActions').style.display = 'block';
+            }
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.id = 'typingIndicator';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'JB';
+            
+            const typingContent = document.createElement('div');
+            typingContent.className = 'message-content typing-indicator active';
+            typingContent.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(typingContent);
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Disable input
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+
+            // Add user message
+            addMessage(message, true);
+            messageInput.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        history: []
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Hide typing indicator
+                hideTypingIndicator();
+                
+                // Add assistant response
+                addMessage(data.reply, false);
+
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('Sorry, I encountered an error. Please make sure the backend server is running on http://localhost:8000', false);
+                console.error('Error:', error);
+            } finally {
+                // Re-enable input
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+            }
+        }
+        
+        function clearChat() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                chatHistory = [];
+                localStorage.removeItem('jamesBellChatHistory');
+                chatMessages.innerHTML = `
+                    <div class="empty-state">
+                        <h2>👋 Hi, I'm James</h2>
+                        <p>Ask me anything about my experience, skills, or background.<br>I'm here to help you learn more about what I can bring to your team.</p>
+                    </div>
+                `;
+                exportControls.style.display = 'none';
+                document.getElementById('contactActions').style.display = 'none';
+            }
+        }
+        
+        function exportToPDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Header
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('Chat with James Bell AI Assistant', 20, 20);
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                const now = new Date();
+                doc.text(`Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 20, 30);
+                doc.text('LinkedIn: https://www.linkedin.com/in/james-bell-tam', 20, 35);
+                doc.text('Email: jamesbellworkrelated@gmail.com', 20, 40);
+                
+                // Line separator
+                doc.line(20, 45, 190, 45);
+                
+                let yPosition = 55;
+                const pageHeight = doc.internal.pageSize.height;
+                const margin = 20;
+                const lineHeight = 6;
+                
+                chatHistory.forEach((msg, index) => {
+                    const timestamp = new Date(msg.timestamp);
+                    const speaker = msg.isUser ? 'YOU' : 'JAMES BELL BOT';
+                    
+                    // Check if we need a new page
+                    if (yPosition > pageHeight - 40) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    // Speaker and timestamp
+                    doc.setFont(undefined, 'bold');
+                    doc.setFontSize(9);
+                    doc.text(`[${timestamp.toLocaleTimeString()}] ${speaker}:`, margin, yPosition);
+                    yPosition += lineHeight;
+                    
+                    // Message content (strip markdown for PDF)
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(9);
+                    const cleanContent = msg.content
+                        .replace(/\*\*(.*?)\*\*/g, '$1')  // Remove bold markers
+                        .replace(/\*(.*?)\*/g, '$1')      // Remove italic markers
+                        .replace(/`(.*?)`/g, '$1')        // Remove code markers
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Keep link text only
+                    const splitText = doc.splitTextToSize(cleanContent, 170);
+                    doc.text(splitText, margin, yPosition);
+                    yPosition += splitText.length * lineHeight + 5;
+                });
+                
+                // Footer
+                if (yPosition > pageHeight - 30) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                doc.line(20, yPosition, 190, yPosition);
+                yPosition += 10;
+                doc.setFontSize(8);
+                doc.text('This chat was generated by James Bell\'s AI assistant.', margin, yPosition);
+                doc.text('For more information: LinkedIn.com/in/james-bell-tam', margin, yPosition + 5);
+                
+                // Save the PDF
+                const fileName = `james-bell-chat-${new Date().toISOString().split('T')[0]}.pdf`;
+                doc.save(fileName);
+                
+            } catch (error) {
+                console.error('PDF export error:', error);
+                alert('PDF export failed. Please try again or use the text export option.');
+            }
+        }
+        
+        function exportToWord() {
+            try {
+                const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docx;
+                
+                const now = new Date();
+                
+                // Create document sections
+                const children = [];
+                
+                // Header
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Chat with James Bell AI Assistant",
+                                bold: true,
+                                size: 32
+                            })
+                        ],
+                        heading: HeadingLevel.HEADING_1,
+                        alignment: AlignmentType.CENTER
+                    })
+                );
+                
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: `Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`,
+                                size: 20
+                            })
+                        ],
+                        spacing: { after: 200 }
+                    })
+                );
+                
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Contact Information:",
+                                bold: true,
+                                size: 22
+                            })
+                        ]
+                    })
+                );
+                
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "LinkedIn: https://www.linkedin.com/in/james-bell-tam",
+                                size: 20
+                            })
+                        ]
+                    })
+                );
+                
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Email: jamesbellworkrelated@gmail.com",
+                                size: 20
+                            })
+                        ],
+                        spacing: { after: 400 }
+                    })
+                );
+                
+                // Chat messages
+                chatHistory.forEach((msg, index) => {
+                    const timestamp = new Date(msg.timestamp);
+                    const speaker = msg.isUser ? 'YOU' : 'JAMES BELL BOT';
+                    
+                    children.push(
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: `[${timestamp.toLocaleTimeString()}] ${speaker}:`,
+                                    bold: true,
+                                    size: 20
+                                })
+                            ],
+                            spacing: { before: 200 }
+                        })
+                    );
+                    
+                    // Parse content for Word export (basic formatting)
+                    const cleanContent = msg.content
+                        .replace(/\*\*(.*?)\*\*/g, '$1')  // Remove bold markers for now
+                        .replace(/\*(.*?)\*/g, '$1')      // Remove italic markers
+                        .replace(/`(.*?)`/g, '$1')        // Remove code markers
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // Keep link text only
+                    
+                    children.push(
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: cleanContent,
+                                    size: 20
+                                })
+                            ],
+                            spacing: { after: 200 }
+                        })
+                    );
+                });
+                
+                // Footer
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "This chat was generated by James Bell's AI assistant.",
+                                italics: true,
+                                size: 18
+                            })
+                        ],
+                        spacing: { before: 400 }
+                    })
+                );
+                
+                children.push(
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "For more information or to continue the conversation, please contact James directly.",
+                                italics: true,
+                                size: 18
+                            })
+                        ]
+                    })
+                );
+                
+                const doc = new Document({
+                    sections: [{
+                        properties: {},
+                        children: children
+                    }]
+                });
+                
+                // Generate and save the document
+                Packer.toBlob(doc).then(blob => {
+                    const fileName = `james-bell-chat-${new Date().toISOString().split('T')[0]}.docx`;
+                    saveAs(blob, fileName);
+                });
+                
+            } catch (error) {
+                console.error('Word export error:', error);
+                alert('Word export failed. Please try again or use the text export option.');
+            }
+        }
+        
+        function generateExportContent() {
+            const now = new Date();
+            let content = `CHAT WITH JAMES BELL AI ASSISTANT\n`;
+            content += `Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}\n`;
+            content += `Contact: LinkedIn - https://www.linkedin.com/in/james-bell-tam\n`;
+            content += `Contact: Email - jamesbellworkrelated@gmail.com\n`;
+            content += `\n${'='.repeat(60)}\n\n`;
+            
+            chatHistory.forEach((msg, index) => {
+                const timestamp = new Date(msg.timestamp);
+                const speaker = msg.isUser ? 'YOU' : 'JAMES BELL BOT';
+                content += `[${timestamp.toLocaleTimeString()}] ${speaker}:\n`;
+                content += `${msg.content}\n\n`;
+            });
+            
+            content += `${'='.repeat(60)}\n`;
+            content += `End of conversation\n`;
+            content += `\nThis chat was generated by James Bell's AI assistant.\n`;
+            content += `For more information or to continue the conversation:\n`;
+            content += `LinkedIn: https://www.linkedin.com/in/james-bell-tam\n`;
+            content += `Email: jamesbellworkrelated@gmail.com`;
+            
+            return content;
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show brief confirmation
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #667eea;
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    z-index: 1000;
+                    animation: fadeInOut 2s ease-in-out;
+                `;
+                notification.textContent = 'Copied to clipboard!';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
+            });
+        }
+        
+        function addFollowUpSuggestions(botMessage) {
+            // Generate contextual follow-up questions based on the bot's response
+            const followUps = generateFollowUps(botMessage);
+            
+            if (followUps.length > 0) {
+                const followUpDiv = document.createElement('div');
+                followUpDiv.className = 'follow-up-suggestions';
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'follow-up-title';
+                titleDiv.textContent = 'You might also want to ask:';
+                
+                const questionsDiv = document.createElement('div');
+                questionsDiv.className = 'follow-up-questions';
+                
+                followUps.forEach(question => {
+                    const questionBtn = document.createElement('button');
+                    questionBtn.className = 'follow-up-question';
+                    questionBtn.textContent = question;
+                    questionBtn.onclick = () => {
+                        messageInput.value = question;
+                        sendMessage();
+                        followUpDiv.remove();
+                    };
+                    questionsDiv.appendChild(questionBtn);
+                });
+                
+                followUpDiv.appendChild(titleDiv);
+                followUpDiv.appendChild(questionsDiv);
+                chatMessages.appendChild(followUpDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+        
+        function generateFollowUps(botMessage) {
+            const followUpMap = {
+                'arctic wolf': [
+                    'How fast were you promoted at Arctic Wolf?',
+                    'What does your team at Arctic Wolf focus on?'
+                ],
+                'customer': [
+                    'Can you give an example of turning around a challenging customer?',
+                    'How do you measure success with customers?'
+                ],
+                'leadership': [
+                    'Have you mentored other team members?',
+                    'How do you handle multiple competing priorities?'
+                ],
+                'technical': [
+                    'What scripting languages do you use?',
+                    'What cloud platforms have you worked with?'
+                ],
+                'ai': [
+                    'What is your stance on using AI in work?',
+                    'Tell me about your AI career goals'
+                ],
+                'security': [
+                    'What kind of security issues do you handle?',
+                    'How do you approach post-incident recovery?'
+                ]
+            };
+            
+            const message = botMessage.toLowerCase();
+            const suggestions = [];
+            
+            for (const [keyword, questions] of Object.entries(followUpMap)) {
+                if (message.includes(keyword)) {
+                    suggestions.push(...questions.slice(0, 2)); // Max 2 per category
+                }
+            }
+            
+            // Remove duplicates and limit to 3 total
+            return [...new Set(suggestions)].slice(0, 3);
+        }
+        
+        // Simple markdown parser for bot messages
+        function parseMarkdown(text) {
+            return text
+                // Bold text: **text** or __text__
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/__(.*?)__/g, '<strong>$1</strong>')
+                // Italic text: *text* or _text_
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/_(.*?)_/g, '<em>$1</em>')
+                // Code: `code`
+                .replace(/`(.*?)`/g, '<code style="background: #333; padding: 2px 4px; border-radius: 3px; font-family: monospace;">$1</code>')
+                // Line breaks
+                .replace(/\n/g, '<br>')
+                // Bullet points: • or -
+                .replace(/^[•\-]\s+(.+)$/gm, '<div style="margin-left: 16px;">• $1</div>')
+                // Links (basic): [text](url)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: #667eea; text-decoration: underline;">$1</a>');
+        }
+
+        // Toggle functions for collapsible sections
+        function toggleExportOptions() {
+            const toggle = document.querySelector('.export-toggle');
+            const buttons = document.getElementById('exportButtons');
+            
+            toggle.classList.toggle('expanded');
+            buttons.classList.toggle('expanded');
+        }
+        
+        function toggleSuggestions() {
+            const toggle = document.querySelector('.suggestions-toggle');
+            const grid = document.getElementById('suggestionsGrid');
+            
+            toggle.classList.toggle('expanded');
+            grid.classList.toggle('expanded');
+        }
+        
+        function toggleContactOptions() {
+            const toggle = document.querySelector('.contact-toggle');
+            const buttons = document.getElementById('contactButtons');
+            
+            toggle.classList.toggle('expanded');
+            buttons.classList.toggle('expanded');
+        }
+        
+        // Auto-collapse suggestions after sending a message
+        function collapseSuggestions() {
+            const toggle = document.querySelector('.suggestions-toggle');
+            const grid = document.getElementById('suggestionsGrid');
+            
+            if (toggle && grid) {
+                toggle.classList.remove('expanded');
+                grid.classList.remove('expanded');
+            }
+        }
+        
+        // Add CSS animation for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateY(-10px); }
+                20% { opacity: 1; transform: translateY(0); }
+                80% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
