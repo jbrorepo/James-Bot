@@ -1,21 +1,12 @@
-# Vercel serverless function for FastAPI
-import os
+from mangum import Mangum
 import sys
+import os
 
-# Ensure we can import from parent directory
+# Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-try:
-    from mangum import Mangum
-    from app_minimal import app
-    
-    # Create handler with proper configuration for Vercel
-    handler = Mangum(app, lifespan="off", api_gateway_base_path="/")
-    
-except Exception as e:
-    # Fallback error handler
-    def handler(event, context):
-        return {
-            "statusCode": 500,
-            "body": f"Error loading application: {str(e)}"
-        }
+# Import the FastAPI app
+from app_minimal import app
+
+# Mangum adapter for ASGI to AWS Lambda/Vercel
+handler = Mangum(app, lifespan="off")
