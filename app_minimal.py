@@ -120,26 +120,52 @@ def export_all_conversations():
 
 def load_config(path: str) -> Dict[str, Any]:
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
+        # Try multiple path locations for serverless compatibility
+        import os
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        possible_paths = [
+            path,  # Current directory
+            os.path.join(base_dir, path),  # Same directory as script
+            os.path.join(base_dir, "..", path),  # Parent directory
+        ]
+        
+        for config_path in possible_paths:
+            if os.path.exists(config_path):
+                with open(config_path, "r", encoding="utf-8") as f:
+                    return yaml.safe_load(f)
+        
+        raise FileNotFoundError(f"Config file not found in any location")
     except Exception as e:
         print(f"Warning: Could not load config: {e}")
         return {
-            "llm": {"config": {"model": "gpt-4o-mini", "temperature": 0.3, "max_tokens": 900, "top_p": 1.0}},
+            "llm": {"config": {"model": "gpt-5.2-2025-12-11", "temperature": 0.3, "max_tokens": 900, "top_p": 1.0}},
             "embedder": {"config": {"model": "text-embedding-3-large"}},
             "bot": {"system_prompt": "You are James Bell's AI assistant. Answer questions about his professional background."}
         }
 
 def load_qa(path: str) -> List[Dict[str, str]]:
     try:
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            if isinstance(data, list):
-                return data
-            elif isinstance(data, dict) and "questions_and_answers" in data:
-                return data["questions_and_answers"]
-            else:
-                return []
+        # Try multiple path locations for serverless compatibility
+        import os
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        possible_paths = [
+            path,  # Current directory
+            os.path.join(base_dir, path),  # Same directory as script
+            os.path.join(base_dir, "..", path),  # Parent directory
+        ]
+        
+        for qa_path in possible_paths:
+            if os.path.exists(qa_path):
+                with open(qa_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if isinstance(data, list):
+                        return data
+                    elif isinstance(data, dict) and "questions_and_answers" in data:
+                        return data["questions_and_answers"]
+                    else:
+                        return []
+        
+        raise FileNotFoundError(f"Q&A file not found in any location")
     except Exception as e:
         print(f"Warning: Could not load Q&A: {e}")
         return [{"question": "Who is James Bell?", "answer": "James Bell is a Concierge Security Engineer 3 & Team Lead at Arctic Wolf."}]
