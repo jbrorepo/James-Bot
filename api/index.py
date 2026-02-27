@@ -1,12 +1,16 @@
-from mangum import Mangum
 import sys
 import os
 
-# Add parent directory to path
+# Add parent directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import the FastAPI app
+# Import after path is set
+from mangum import Mangum
 from app_minimal import app
 
-# Mangum adapter for ASGI to AWS Lambda/Vercel
-handler = Mangum(app, lifespan="off")
+# Create Mangum handler
+_handler = Mangum(app, lifespan="off")
+
+# Vercel serverless function entry point
+def handler(event, context):
+    return _handler(event, context)
