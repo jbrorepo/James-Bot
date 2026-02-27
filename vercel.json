@@ -4,9 +4,57 @@
     {
       "src": "api/index.py",
       "use": "@vercel/python"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "chat.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "james-headshot.jpg",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "James Bell Resume 2025.pdf",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/health",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/chat",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/analytics",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/conversations(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/resume",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/chat.html",
+      "dest": "/chat.html"
+    },
+    {
+      "src": "/james-headshot.jpg",
+      "dest": "/james-headshot.jpg"
+    },
+    {
+      "src": "/",
+      "dest": "api/index.py"
+    },
     {
       "src": "/(.*)",
       "dest": "api/index.py"
