@@ -30,6 +30,7 @@ Thumbs.db
 # Logs
 *.log
 logs/
+conversation_logs/
 
 # Dependencies
 node_modules/

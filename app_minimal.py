@@ -293,7 +293,7 @@ def serve_chat(request: Request):
     logger.info(f"Chat page view from {request.client.host}")
     
     if os.path.exists("chat.html"):
-        return FileResponse("chat.html")
+        return FileResponse("chat.html", media_type="text/html")
     return {"error": "chat.html not found"}
 
 @app.get("/resume")
@@ -478,10 +478,10 @@ Use the Q&A information to answer directly and concisely."""
             }
             
             # Use shorter responses to prevent elaboration
-            if "gpt-5" in llm_model.lower() or "o3" in llm_model.lower():
-                completion_params["max_completion_tokens"] = 300  # Much shorter to prevent hallucinations
+            if "gpt-5" in llm_model.lower() or "o3" in llm_model.lower() or "o1" in llm_model.lower():
+                completion_params["max_completion_tokens"] = 300  # For newer models
             else:
-                completion_params["max_tokens"] = 300
+                completion_params["max_tokens"] = 300  # For older models like GPT-4
             
             resp = client.chat.completions.create(**completion_params)
             bot_response = resp.choices[0].message.content.strip()

@@ -118,19 +118,18 @@ start_server.bat
 
 ### 2. Set OpenAI API Key
 
-The `start_server.bat` file already includes the API key configuration.
+Create a `.env` file in the project root:
 
-Alternatively, set it manually:
-
-**Windows (CMD):**
-```cmd
-set OPENAI_API_KEY=your-api-key-here
+```bash
+cp .env.example .env
 ```
 
-**Windows (PowerShell):**
-```powershell
-$env:OPENAI_API_KEY="your-api-key-here"
+Then edit `.env` and add your OpenAI API key:
 ```
+OPENAI_API_KEY=sk-your-actual-api-key-here
+```
+
+**Get your API key from:** https://platform.openai.com/api-keys
 
 ### 3. Start the Backend
 
@@ -139,43 +138,73 @@ $env:OPENAI_API_KEY="your-api-key-here"
 start_server.bat
 ```
 
+**Easy way (Mac/Linux):**
+```bash
+chmod +x start_server.sh
+./start_server.sh
+```
+
 **Manual way:**
 ```bash
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
+uvicorn app_minimal:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### 4. Open the UI
 
-Simply open `index.html` in your browser. The chat interface will connect to your local backend at `http://localhost:8000`.
+Open your browser to: **http://localhost:8000**
+
+The chat interface will connect to your local backend automatically.
 
 ## Testing
 
 Once the server is running:
-1. Open `index.html` in your browser
-2. Try the suggested questions or ask your own
-3. The bot will respond using **only** verified information from `james_qa.json`
-4. If you ask something outside the knowledge base, it will redirect you to James's contact info
+1. Open http://localhost:8000 in your browser (not just the HTML file!)
+2. Click "Chat with My AI Assistant" or navigate to http://localhost:8000/chat.html
+3. Try the suggested questions or ask your own
+4. The bot will respond using **only** verified information from `james_qa.json`
+5. If you ask something outside the knowledge base, it will redirect you to James's contact info
+
+**Health Check:** Visit http://localhost:8000/health to verify the server is running correctly.
 
 ## Files
 
-- `app.py` - FastAPI backend with semantic search and GPT-5.1 integration
+- `app_minimal.py` - FastAPI backend with semantic search and GPT integration
 - `config.yaml` - Model configuration and strict system prompt
-- `james_qa.json` - 42 curated, validated Q&A pairs
-- `index.html` - Dark-themed chat UI
+- `james_qa.json` - 42+ curated, validated Q&A pairs
+- `index.html` - Main portfolio page with dark theme
+- `chat.html` - AI chat interface
 - `requirements.txt` - Python dependencies
 - `start_server.bat` - Windows startup script
+- `start_server.sh` - Mac/Linux startup script
+- `.env` - Environment variables (create from .env.example)
 
 ## Deployment
 
 For production:
-1. Update CORS origins in `app.py` to your domain (change `allow_origins=["*"]`)
-2. Deploy backend to your hosting platform (Heroku, Railway, AWS, etc.)
-3. Update `API_URL` in `index.html` to your backend URL
-4. Embed `index.html` on your website or serve it statically
+1. Set your OpenAI API key as an environment variable on your hosting platform
+2. Update CORS origins in `app_minimal.py` to your domain (change `allow_origins=["*"]` to your specific domain)
+3. Deploy backend to your hosting platform (Railway, Heroku, AWS, etc.)
+4. The app will automatically serve the HTML files from the root directory
+5. Access your deployed URL to see the portfolio
+
+**Recommended Platforms:**
+- Railway (easiest - uses railway.json config)
+- Heroku (uses Procfile)
+- AWS Elastic Beanstalk
+- Google Cloud Run
+- Azure App Service
+
+See `SETUP_GUIDE.md` for detailed deployment instructions.
 
 ## Model Information
 
-This project uses **GPT-5.1** which requires `max_completion_tokens` instead of the older `max_tokens` parameter. The code automatically handles this difference and will work with both newer models (GPT-5.x, o3) and older models (GPT-4, GPT-3.5).
+This project uses **gpt-4o-mini** by default for reliable performance and cost-effectiveness. The code automatically handles parameter differences between model versions and will work with:
+- GPT-4o-mini (default, recommended)
+- GPT-4, GPT-4-turbo
+- GPT-3.5-turbo
+- Newer models (GPT-5.x, o3, o1) when available
+
+To change the model, edit `config.yaml` and update the `model` field.
 
 ## Contact
 
