@@ -5,7 +5,7 @@ llm:
   provider: openai
   config:
     # Using GPT-5.2 for optimal performance
-    model: gpt-5.2-2025-12-11
+    model: gpt-5.2
     temperature: 0.3
     max_tokens: 900
     top_p: 1.0
