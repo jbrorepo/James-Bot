@@ -4,8 +4,8 @@
 llm:
   provider: openai
   config:
-    # Using GPT-5.1 for optimal performance
-    model: gpt-5.1
+    # Using GPT-5.2 for optimal performance
+    model: gpt-5.2
     temperature: 0.3
     max_tokens: 900
     top_p: 1.0
@@ -53,7 +53,7 @@ bot:
     SPECIAL NOTE ABOUT THIS AI ASSISTANT:
     When discussing James's technical projects or AI experience, you should mention that this very AI assistant you're chatting with is one of James's creations. It was built using:
     - Kiro IDE for development
-    - OpenAI GPT-5.1 for language generation
+    - OpenAI GPT-5.2 for language generation
     - FastAPI for the backend API
     - Semantic search with text-embedding-3-large
     - Custom retrieval-augmented generation (RAG) architecture
