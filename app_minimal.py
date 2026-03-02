@@ -118,6 +118,9 @@ def export_all_conversations():
 
 # ---------- Config & Data Loading ----------
 
+# Get the base directory of the application
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_config(path: str) -> Dict[str, Any]:
     try:
         with open(path, "r", encoding="utf-8") as f:
@@ -145,8 +148,8 @@ def load_qa(path: str) -> List[Dict[str, str]]:
         return [{"question": "Who is James Bell?", "answer": "James Bell is a Concierge Security Engineer 3 & Team Lead at Arctic Wolf."}]
 
 # Load configuration with error handling
-config = load_config("config.yaml")
-qa_pairs = load_qa("james_qa.json")
+config = load_config(os.path.join(BASE_DIR, "config.yaml"))
+qa_pairs = load_qa(os.path.join(BASE_DIR, "james_qa.json"))
 
 # OpenAI Setup with error handling
 try:
@@ -275,9 +278,10 @@ def serve_portfolio(request: Request):
     analytics_data["visitors"].append(visitor_info)
     logger.info(f"Portfolio view from {request.client.host}")
     
-    if os.path.exists("index.html"):
-        return FileResponse("index.html")
-    return {"message": "James Bell Portfolio API", "status": "running", "note": "index.html not found"}
+    index_path = os.path.join(BASE_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"message": "James Bell Portfolio API", "status": "running", "note": "index.html not found", "base_dir": BASE_DIR}
 
 @app.get("/chat.html")
 def serve_chat(request: Request):
@@ -292,9 +296,10 @@ def serve_chat(request: Request):
     analytics_data["visitors"].append(visitor_info)
     logger.info(f"Chat page view from {request.client.host}")
     
-    if os.path.exists("chat.html"):
-        return FileResponse("chat.html", media_type="text/html")
-    return {"error": "chat.html not found"}
+    chat_path = os.path.join(BASE_DIR, "chat.html")
+    if os.path.exists(chat_path):
+        return FileResponse(chat_path, media_type="text/html")
+    return {"error": "chat.html not found", "base_dir": BASE_DIR}
 
 @app.get("/resume")
 def download_resume(request: Request):
@@ -312,20 +317,22 @@ def download_resume(request: Request):
     
     # Check for resume file
     resume_filename = "James Bell Resume 2025.pdf"
-    if os.path.exists(resume_filename):
-        return FileResponse(resume_filename, 
+    resume_path = os.path.join(BASE_DIR, resume_filename)
+    if os.path.exists(resume_path):
+        return FileResponse(resume_path, 
                           filename="James_Bell_Resume_2025.pdf",
                           media_type="application/pdf")
     
     # Fallback if file not found
-    return {"message": f"Resume file not found. Please ensure '{resume_filename}' is uploaded to the project."}
+    return {"message": f"Resume file not found. Please ensure '{resume_filename}' is uploaded to the project.", "base_dir": BASE_DIR}
 
 @app.get("/james-headshot.jpg")
 def serve_headshot():
     """Serve the headshot image"""
-    if os.path.exists("james-headshot.jpg"):
-        return FileResponse("james-headshot.jpg")
-    return {"error": "james-headshot.jpg not found"}
+    headshot_path = os.path.join(BASE_DIR, "james-headshot.jpg")
+    if os.path.exists(headshot_path):
+        return FileResponse(headshot_path)
+    return {"error": "james-headshot.jpg not found", "base_dir": BASE_DIR}
 
 @app.post("/chat", response_model=ChatResponse)
 def chat_endpoint(payload: ChatRequest, request: Request):
