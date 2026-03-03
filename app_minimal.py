@@ -283,6 +283,22 @@ def serve_portfolio(request: Request):
         return FileResponse(index_path)
     return {"message": "James Bell Portfolio API", "status": "running", "note": "index.html not found", "base_dir": BASE_DIR}
 
+@app.get("/portfolio.html")
+def serve_portfolio_html(request: Request):
+    """Serve the portfolio HTML page"""
+    analytics_data["page_views"] += 1
+    visitor_info = {
+        "timestamp": datetime.now().isoformat(),
+        "ip": request.client.host,
+        "user_agent": request.headers.get("user-agent", ""),
+        "page": "portfolio.html"
+    }
+    analytics_data["visitors"].append(visitor_info)
+    portfolio_path = os.path.join(BASE_DIR, "portfolio.html")
+    if os.path.exists(portfolio_path):
+        return FileResponse(portfolio_path, media_type="text/html")
+    return {"error": "portfolio.html not found", "base_dir": BASE_DIR}
+
 @app.get("/chat.html")
 def serve_chat(request: Request):
     """Serve the AI chat interface"""
