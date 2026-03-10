@@ -2,15 +2,22 @@
 
 import { useChat } from 'ai/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, ArrowLeft, Loader2, Bot, User } from 'lucide-react';
+import { Send, ArrowLeft, Loader2, Bot, User, FileText, AlertCircle, RefreshCcw } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 export default function Chat() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    const { messages, input, handleInputChange, handleSubmit, isLoading, error, reload, setInput, append } = useChat({
         api: '/api/chat',
     });
+
+    const suggestedPrompts = [
+        "What is James's current role at Arctic Wolf?",
+        "Tell me about his AI and Next.js projects.",
+        "What are his core professional values?",
+        "How much experience does he have with customer success?"
+    ];
 
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -27,8 +34,8 @@ export default function Chat() {
                 {/* Header */}
                 <header className="flex h-16 items-center justify-between px-6 border-b border-[#2a2a2a] bg-[rgba(10,10,10,0.95)] backdrop-blur-md">
                     <div className="flex items-center gap-4">
-                        <Link href="/" className="p-2 hover:bg-[rgba(255,255,255,0.05)] rounded-full transition-colors">
-                            <ArrowLeft className="w-5 h-5 text-[#b0b0b0]" />
+                        <Link href="/" className="p-2 hover:bg-[rgba(255,255,255,0.05)] rounded-full transition-colors group">
+                            <ArrowLeft className="w-5 h-5 text-[#b0b0b0] group-hover:text-white" />
                         </Link>
                         <div>
                             <h1 className="font-semibold text-lg text-[#e0e0e0]">James AI Assistant</h1>
@@ -41,6 +48,10 @@ export default function Chat() {
                             </p>
                         </div>
                     </div>
+                    <a href="/James Bell Resume 2025.pdf" target="_blank" className="hidden sm:flex items-center gap-2 text-xs font-medium bg-[#2a2a2a] hover:bg-[#333] border border-[#333] hover:border-[#667eea] px-3 py-1.5 rounded-lg transition-colors text-[#e0e0e0]">
+                        <FileText className="w-3.5 h-3.5" />
+                        Download Resume
+                    </a>
                 </header>
 
                 {/* Messages */}
@@ -49,12 +60,24 @@ export default function Chat() {
                     className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scrollbar-hide scroll-smooth"
                 >
                     {messages.length === 0 && (
-                        <div className="h-full flex flex-col items-center justify-center text-center opacity-80">
-                            <div className="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl mb-4">JB</div>
-                            <p className="text-xl font-semibold text-[#e0e0e0] mb-2">Hello! I'm James's AI Assistant.</p>
-                            <p className="text-sm text-[#b0b0b0] max-w-md">
+                        <div className="h-full flex flex-col items-center justify-center text-center px-4 fade-in">
+                            <div className="w-20 h-20 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-2xl mb-6 shadow-[0_0_30px_rgba(102,126,234,0.3)]">JB</div>
+                            <h2 className="text-2xl font-bold text-[#e0e0e0] mb-3">Hello! I'm James's AI Assistant.</h2>
+                            <p className="text-[#b0b0b0] max-w-md mb-8">
                                 I can answer questions about James's professional background, skills, and experience at Arctic Wolf. How can I help you today?
                             </p>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
+                                {suggestedPrompts.map((prompt, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => append({ role: 'user', content: prompt })}
+                                        className="text-left text-sm text-[#d0d0d0] bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#2a2a2a] hover:border-[#667eea] p-4 rounded-xl transition-all hover:-translate-y-0.5"
+                                    >
+                                        {prompt}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     )}
 
@@ -101,6 +124,24 @@ export default function Chat() {
                                 <span className="w-1.5 h-1.5 bg-[#b0b0b0] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
                                 <span className="w-1.5 h-1.5 bg-[#b0b0b0] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                                 <span className="w-1.5 h-1.5 bg-[#b0b0b0] rounded-full animate-bounce"></span>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {error && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center my-4">
+                            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-start gap-4 max-w-md w-full">
+                                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                                <div className="flex-1">
+                                    <p className="font-semibold text-sm">Failed to connect to the AI model</p>
+                                    <p className="text-xs opacity-80 mt-1">{error.message}</p>
+                                    <button
+                                        onClick={() => reload()}
+                                        className="mt-3 text-xs bg-red-500/20 hover:bg-red-500/30 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 font-medium"
+                                    >
+                                        <RefreshCcw className="w-3 h-3" /> Try Again
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     )}

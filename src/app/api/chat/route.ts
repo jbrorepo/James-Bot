@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
         // Use the official @ai-sdk/google provider with the latest flash model
         const result = await streamText({
-            model: google('gemini-2.5-pro-preview-05-06'),
+            model: google('gemini-1.5-pro'),
             system: SYSTEM_PROMPT,
             messages,
             temperature: 0.2, // Lower temperature to prevent hallucination
