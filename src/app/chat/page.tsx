@@ -14,7 +14,6 @@ export default function Chat() {
 
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    // Auto-scroll to bottom of chat
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -22,43 +21,38 @@ export default function Chat() {
     }, [messages, isLoading]);
 
     return (
-        <main className="min-h-screen relative flex flex-col p-4 sm:p-8 overflow-hidden items-center justify-center">
+        <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 hero-glow">
+            <div className="w-full max-w-4xl h-[90vh] flex flex-col card rounded-2xl overflow-hidden shadow-2xl border border-[#2a2a2a]">
 
-            {/* Abstract Background Element */}
-            <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
-            <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none" />
-
-            <div className="z-10 w-full max-w-4xl h-[85vh] flex flex-col glassmorphism border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-
-                {/* Chat Header */}
-                <header className="flex h-16 items-center justify-between px-6 border-b border-white/5 bg-secondary/30 backdrop-blur-md">
+                {/* Header */}
+                <header className="flex h-16 items-center justify-between px-6 border-b border-[#2a2a2a] bg-[rgba(10,10,10,0.95)] backdrop-blur-md">
                     <div className="flex items-center gap-4">
-                        <Link href="/" className="p-2 hover:bg-white/5 rounded-full transition-colors">
-                            <ArrowLeft className="w-5 h-5 text-muted" />
+                        <Link href="/" className="p-2 hover:bg-[rgba(255,255,255,0.05)] rounded-full transition-colors">
+                            <ArrowLeft className="w-5 h-5 text-[#b0b0b0]" />
                         </Link>
                         <div>
-                            <h1 className="font-outfit font-semibold text-lg">James AI Assistant</h1>
-                            <p className="text-xs text-primary flex items-center gap-1.5">
+                            <h1 className="font-semibold text-lg text-[#e0e0e0]">James AI Assistant</h1>
+                            <p className="text-xs text-[#667eea] flex items-center gap-1.5">
                                 <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#667eea] opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#667eea]"></span>
                                 </span>
-                                Online & Powered by Gemini
+                                Online &bull; Powered by Gemini
                             </p>
                         </div>
                     </div>
                 </header>
 
-                {/* Chat Messages */}
+                {/* Messages */}
                 <div
                     ref={scrollRef}
                     className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 scrollbar-hide scroll-smooth"
                 >
                     {messages.length === 0 && (
                         <div className="h-full flex flex-col items-center justify-center text-center opacity-80">
-                            <Bot className="w-12 h-12 text-primary/60 mb-4" />
-                            <p className="text-xl font-outfit mb-2">Hello, I'm James's AI Assistant.</p>
-                            <p className="text-sm text-muted max-w-md">
+                            <div className="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white font-bold text-xl mb-4">JB</div>
+                            <p className="text-xl font-semibold text-[#e0e0e0] mb-2">Hello! I'm James's AI Assistant.</p>
+                            <p className="text-sm text-[#b0b0b0] max-w-md">
                                 I can answer questions about James's professional background, skills, and experience at Arctic Wolf. How can I help you today?
                             </p>
                         </div>
@@ -70,68 +64,53 @@ export default function Chat() {
                                 key={m.id}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className={["flex items-start gap-3 sm:gap-4", m.role === 'user' ? "justify-end" : "justify-start"].join(" ")}
+                                className={["flex items-start gap-3", m.role === 'user' ? "justify-end" : "justify-start"].join(" ")}
                             >
-                                {/* Bot Avatar */}
                                 {m.role !== 'user' && (
-                                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 border border-primary/30">
-                                        <Bot className="w-4 h-4 text-primary" />
-                                    </div>
+                                    <div className="w-8 h-8 rounded-full gradient-bg flex items-center justify-center shrink-0 text-white text-xs font-bold">JB</div>
                                 )}
-
-                                {/* Message Bubble */}
                                 <div className={[
-                                    "max-w-[85%] sm:max-w-[75%] rounded-2xl px-5 py-3.5",
+                                    "max-w-[80%] rounded-xl px-4 py-3",
                                     m.role === 'user'
-                                        ? "bg-foreground text-background rounded-tr-sm shadow-md"
-                                        : "bg-secondary/60 border border-border text-foreground rounded-tl-sm"
+                                        ? "gradient-bg text-white rounded-tr-sm"
+                                        : "bg-[#2a2a2a] text-[#e0e0e0] rounded-tl-sm"
                                 ].join(" ")}>
                                     {m.role === 'user' ? (
                                         <p className="whitespace-pre-wrap">{m.content}</p>
                                     ) : (
-                                        <div className="prose-custom text-[0.95rem] leading-relaxed">
+                                        <div className="prose-custom text-sm leading-relaxed">
                                             <ReactMarkdown>{m.content}</ReactMarkdown>
                                         </div>
                                     )}
                                 </div>
-
-                                {/* User Avatar */}
                                 {m.role === 'user' && (
-                                    <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-border">
-                                        <User className="w-4 h-4 text-muted" />
+                                    <div className="w-8 h-8 rounded-full bg-[#2a2a2a] flex items-center justify-center shrink-0 border border-[#333]">
+                                        <User className="w-4 h-4 text-[#b0b0b0]" />
                                     </div>
                                 )}
                             </motion.div>
                         ))}
                     </AnimatePresence>
 
-                    {/* Loading Indicator */}
                     {isLoading && messages[messages.length - 1]?.role === 'user' && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="flex items-start gap-4 justify-start"
-                        >
-                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 border border-primary/30">
-                                <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-3 justify-start">
+                            <div className="w-8 h-8 rounded-full gradient-bg flex items-center justify-center shrink-0">
+                                <Loader2 className="w-4 h-4 text-white animate-spin" />
                             </div>
-                            <div className="bg-secondary/60 border border-border text-foreground rounded-2xl rounded-tl-sm px-5 py-3.5 flex items-center gap-1.5 h-12">
-                                <span className="w-1.5 h-1.5 bg-muted rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                                <span className="w-1.5 h-1.5 bg-muted rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                                <span className="w-1.5 h-1.5 bg-muted rounded-full animate-bounce"></span>
+                            <div className="bg-[#2a2a2a] text-[#e0e0e0] rounded-xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5 h-11">
+                                <span className="w-1.5 h-1.5 bg-[#b0b0b0] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                <span className="w-1.5 h-1.5 bg-[#b0b0b0] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                <span className="w-1.5 h-1.5 bg-[#b0b0b0] rounded-full animate-bounce"></span>
                             </div>
                         </motion.div>
                     )}
                 </div>
 
-                {/* Input Area */}
-                <div className="p-4 sm:p-6 bg-secondary/30 backdrop-blur-md border-t border-white/5">
-                    <form
-                        onSubmit={handleSubmit}
-                        className="relative flex items-center"
-                    >
+                {/* Input */}
+                <div className="p-4 sm:p-6 bg-[rgba(10,10,10,0.95)] backdrop-blur-md border-t border-[#2a2a2a]">
+                    <form onSubmit={handleSubmit} className="relative flex items-center">
                         <input
-                            className="w-full bg-secondary/50 border border-border focus:border-primary/50 text-foreground rounded-xl pl-5 pr-14 py-4 outline-none transition-all placeholder:text-muted shadow-inner"
+                            className="w-full bg-[#2a2a2a] border border-[#333] focus:border-[#667eea] text-[#e0e0e0] rounded-xl pl-5 pr-14 py-4 outline-none transition-all placeholder:text-[#666]"
                             value={input}
                             placeholder="Ask about James's experience..."
                             onChange={handleInputChange}
@@ -139,14 +118,12 @@ export default function Chat() {
                         <button
                             type="submit"
                             disabled={isLoading || !input.trim()}
-                            className="absolute right-2 p-2.5 bg-primary hover:bg-primary-hover disabled:bg-secondary disabled:text-muted disabled:cursor-not-allowed text-white rounded-lg transition-colors flex items-center justify-center"
+                            className="absolute right-2 p-2.5 gradient-bg disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-lg transition-opacity flex items-center justify-center"
                         >
                             <Send className="w-4 h-4" />
                         </button>
                     </form>
-                    <div className="mt-3 text-center">
-                        <p className="text-[11px] text-muted">Answers generated by Gemini. May occasionally produce inaccuracies.</p>
-                    </div>
+                    <p className="mt-3 text-center text-[11px] text-[#666]">Answers generated by Gemini. May occasionally produce inaccuracies.</p>
                 </div>
             </div>
         </main>

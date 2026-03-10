@@ -1,42 +1,75 @@
 @import "tailwindcss";
 
+/* ==============================
+   THEME: Custom CSS Variables
+   ============================== */
 @layer base {
   :root {
-    --background: #0f172a;
-    /* Slate 900 */
-    --foreground: #f8fafc;
-    /* Slate 50 */
-    --primary: #8b5cf6;
-    /* Violet 500 */
-    --primary-hover: #9333ea;
-    /* Purple 600 */
-    --secondary: #1e293b;
-    /* Slate 800 */
-    --secondary-hover: #334155;
-    /* Slate 700 */
-    --accent: #3b82f6;
-    /* Blue 500 */
-    --border: #334155;
-    /* Slate 700 */
-    --muted: #94a3b8;
-    /* Slate 400 */
-    --muted-bg: rgba(30, 41, 59, 0.5);
-    /* Semi-transparent slate 800 */
+    --background: #0a0a0a;
+    --foreground: #e0e0e0;
+    --gradient-start: #667eea;
+    --gradient-end: #764ba2;
+    --card-bg: #1a1a1a;
+    --card-border: #2a2a2a;
+    --muted: #b0b0b0;
+    --text-bright: #d0d0d0;
+    --text-white: #f8fafc;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
   }
 }
 
+/* ==============================
+   UTILITY CLASSES
+   ============================== */
 @layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+  }
+
   .glassmorphism {
-    background: rgba(30, 41, 59, 0.6);
+    background: rgba(26, 26, 26, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--card-border);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .skill-tag {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid #333;
   }
 
   /* Custom scrollbar for chat */
@@ -49,7 +82,7 @@
   }
 
   .scrollbar-hide::-webkit-scrollbar-thumb {
-    background-color: var(--border);
+    background-color: var(--card-border);
     border-radius: 10px;
   }
 
@@ -63,7 +96,7 @@
   }
 
   .prose-custom strong {
-    color: var(--foreground);
+    color: var(--text-white);
     font-weight: 600;
   }
 
@@ -86,15 +119,46 @@
   }
 }
 
-/* Background animated glow */
-.bg-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+/* ==============================
+   HERO BACKGROUND RADIAL GLOW
+   ============================== */
+.hero-glow {
+  background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.12) 0%, rgba(10, 10, 10, 1) 70%);
+}
+
+/* ==============================
+   ANIMATED GRADIENT PROFILE RING
+   ============================== */
+@keyframes gradient-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.profile-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(var(--gradient-start), var(--gradient-end), var(--gradient-start));
+  animation: gradient-spin 4s linear infinite;
   z-index: -1;
-  overflow: hidden;
-  background: radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.1), transparent 40%);
+}
+
+/* ==============================
+   SECTION ALTERNATE BACKGROUND
+   ============================== */
+.section-alt {
+  background: #0f0f0f;
+}
+
+/* ==============================
+   NAVIGATION SCROLLED STATE
+   ============================== */
+.nav-scrolled {
+  background: rgba(10, 10, 10, 0.98) !important;
 }
