@@ -1,19 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
-    --background: #0f172a; /* Slate 900 */
-    --foreground: #f8fafc; /* Slate 50 */
-    --primary: #8b5cf6; /* Violet 500 */
-    --primary-hover: #9333ea; /* Purple 600 */
-    --secondary: #1e293b; /* Slate 800 */
-    --secondary-hover: #334155; /* Slate 700 */
-    --accent: #3b82f6; /* Blue 500 */
-    --border: #334155; /* Slate 700 */
-    --muted: #94a3b8; /* Slate 400 */
-    --muted-bg: rgba(30, 41, 59, 0.5); /* Semi-transparent slate 800 */
+    --background: #0f172a;
+    /* Slate 900 */
+    --foreground: #f8fafc;
+    /* Slate 50 */
+    --primary: #8b5cf6;
+    /* Violet 500 */
+    --primary-hover: #9333ea;
+    /* Purple 600 */
+    --secondary: #1e293b;
+    /* Slate 800 */
+    --secondary-hover: #334155;
+    /* Slate 700 */
+    --accent: #3b82f6;
+    /* Blue 500 */
+    --border: #334155;
+    /* Slate 700 */
+    --muted: #94a3b8;
+    /* Slate 400 */
+    --muted-bg: rgba(30, 41, 59, 0.5);
+    /* Semi-transparent slate 800 */
   }
 
   body {
@@ -35,33 +43,40 @@
   .scrollbar-hide::-webkit-scrollbar {
     width: 6px;
   }
+
   .scrollbar-hide::-webkit-scrollbar-track {
     background: transparent;
   }
+
   .scrollbar-hide::-webkit-scrollbar-thumb {
     background-color: var(--border);
     border-radius: 10px;
   }
-  
+
   /* Markdown Styles for Chat */
   .prose-custom p {
     margin-bottom: 0.75em;
   }
+
   .prose-custom p:last-child {
     margin-bottom: 0;
   }
+
   .prose-custom strong {
     color: var(--foreground);
     font-weight: 600;
   }
+
   .prose-custom ul {
     list-style-type: disc;
     padding-left: 1.5em;
     margin-bottom: 0.75em;
   }
+
   .prose-custom li {
     margin-bottom: 0.25em;
   }
+
   .prose-custom code {
     background: rgba(0, 0, 0, 0.3);
     padding: 0.1em 0.3em;
@@ -81,5 +96,5 @@
   z-index: -1;
   overflow: hidden;
   background: radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 40%),
-              radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.1), transparent 40%);
+    radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.1), transparent 40%);
 }

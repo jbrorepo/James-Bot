@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Terminal, Shield, Cpu, MessageSquare } from 'lucide-react';
 
 export default function Home() {
@@ -64,27 +65,44 @@ export default function Home() {
 
                 {/* Right Column: Key Skills / Visuals */}
                 <motion.div
-                    className="lg:col-span-5 grid grid-cols-1 gap-4 w-full"
+                    className="lg:col-span-5 flex flex-col items-center lg:items-end gap-6 w-full"
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 >
-                    {/* Card 1 */}
-                    <div className="glassmorphism p-6 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                        <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4 border border-primary/30">
-                            <Shield className="w-6 h-6 text-primary" />
+                    {/* Profile Image */}
+                    <div className="relative w-56 h-56 sm:w-72 sm:h-72 rounded-full p-1 bg-gradient-to-tr from-primary via-accent to-primary animate-gradient-xy shadow-xl">
+                        <div className="w-full h-full rounded-full overflow-hidden border-[6px] border-background bg-secondary relative">
+                            <Image
+                                src="/james-headshot.jpg"
+                                alt="James Bell"
+                                fill
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                                priority
+                            />
                         </div>
-                        <h3 className="text-lg font-semibold font-outfit mb-2">Cybersecurity Leadership</h3>
-                        <p className="text-sm text-muted">Leading threat hunting, vulnerability management, and customer success strategies at scale.</p>
+                        {/* Online Status Indicator */}
+                        <div className="absolute bottom-6 right-6 w-6 h-6 bg-green-500 border-4 border-background rounded-full shadow-[0_0_15px_rgba(34,197,94,0.6)]"></div>
                     </div>
 
-                    {/* Card 2 */}
-                    <div className="glassmorphism p-6 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                        <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 border border-accent/30">
-                            <Cpu className="w-6 h-6 text-accent" />
+                    <div className="grid grid-cols-1 gap-4 w-full">
+                        {/* Card 1 */}
+                        <div className="glassmorphism p-6 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
+                            <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4 border border-primary/30">
+                                <Shield className="w-6 h-6 text-primary" />
+                            </div>
+                            <h3 className="text-lg font-semibold font-outfit mb-2">Cybersecurity Leadership</h3>
+                            <p className="text-sm text-muted">Leading threat hunting, vulnerability management, and customer success strategies at scale.</p>
                         </div>
-                        <h3 className="text-lg font-semibold font-outfit mb-2">Next-Gen AI Engineering</h3>
-                        <p className="text-sm text-muted">Building functional, autonomous agents using Next.js, Vercel AI SDK, and Google Gemini.</p>
+
+                        {/* Card 2 */}
+                        <div className="glassmorphism p-6 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
+                            <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center mb-4 border border-accent/30">
+                                <Cpu className="w-6 h-6 text-accent" />
+                            </div>
+                            <h3 className="text-lg font-semibold font-outfit mb-2">Next-Gen AI Engineering</h3>
+                            <p className="text-sm text-muted">Building functional, autonomous agents using Next.js, Vercel AI SDK, and Google Gemini.</p>
+                        </div>
                     </div>
                 </motion.div>
 
