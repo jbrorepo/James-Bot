@@ -11,13 +11,13 @@ export async function POST(req: Request) {
 
         // Use the official @ai-sdk/google provider with the latest flash model
         const result = await streamText({
-            model: google('gemini-1.5-pro'),
+            model: google('gemini-2.5-flash'),
             system: SYSTEM_PROMPT,
             messages,
             temperature: 0.2, // Lower temperature to prevent hallucination
         });
 
-        return result.toTextStreamResponse();
+        return result.toDataStreamResponse();
     } catch (error) {
         console.error('Chat API Error:', error);
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
