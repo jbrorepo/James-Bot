@@ -9,9 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@ai-sdk/google": "^0.0.52",
-    "@ai-sdk/react": "^3.0.118",
-    "@google/genai": "^1.44.0",
+    "@ai-sdk/google": "^1.0.12",
     "ai": "^3.4.33",
     "clsx": "^2.1.1",
     "framer-motion": "^12.35.0",

@@ -20,7 +20,8 @@ export async function POST(req: Request) {
         return result.toTextStreamResponse();
     } catch (error) {
         console.error('Chat API Error:', error);
-        return new Response(JSON.stringify({ error: 'Failed to communicate with AI provider' }), {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        return new Response(JSON.stringify({ error: `AI Provider Error: ${errorMessage}` }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });
